@@ -8,6 +8,7 @@ import konverter.helper.filer
 import konverter.helper.initTools
 import konverter.resovler.ContractResolver
 import konverter.resovler.MetaResolver
+import java.lang.String.format
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.ProcessingEnvironment
 import javax.annotation.processing.RoundEnvironment
@@ -30,7 +31,6 @@ class KonvertProcessor : AbstractProcessor() {
         annotations: MutableSet<out TypeElement>,
         roundEnv: RoundEnvironment
     ): Boolean {
-        // no annotation to process
         if (annotations.isEmpty()) return true
 
         roundEnv.getElementsAnnotatedWith(Konvert::class.java)
@@ -48,6 +48,8 @@ class KonvertProcessor : AbstractProcessor() {
         val packageName = them.first().packageElement.toString()
 
         val fileBuilder = FileSpec.builder(packageName, fileName)
+
+        fileBuilder.addImport("java.time", "ZoneOffset")
 
         them.map(::process).forEach {
             fileBuilder.addFunction(it)
@@ -70,7 +72,7 @@ class KonvertProcessor : AbstractProcessor() {
         )
 
         val members = toClass.members.joinToString(", ") {
-            "${it.simpleName} = ${resolvedMembersMap[it]}"
+            format("%s = %s", it.simpleName, resolvedMembersMap[it])
         }
 
         val funSpec = FunSpec.builder("to" + toClass.name.simpleName)

@@ -41,8 +41,14 @@ inline fun <reified T : Annotation> Element.getAnnotationClassValue(
     (e.typeMirror as DeclaredType).asElement() as TypeElement
 }
 
+inline fun <reified T : Any> TypeMirror.isPrimitiveType(): Boolean {
+    return T::class.javaPrimitiveType?.let {
+        it.isPrimitive && it.typeName == toString()
+    } ?: false
+}
+
 inline fun <reified T : Any> TypeMirror.isType(): Boolean {
-    return T::class.java.name == this.toString()
+    return T::class.javaObjectType.typeName == toString()
 }
 
 fun TypeMirror.notNull(): Boolean {

@@ -2,14 +2,17 @@ package konverter.resovler
 
 import konverter.annotation.KonvertContract
 import konverter.default.DefaultContract
+import konverter.helper.isPrimitiveType
 import konverter.helper.isType
 import konverter.helper.notNull
+import java.time.LocalDateTime
+import java.util.Date
 import javax.lang.model.element.VariableElement
 import javax.lang.model.type.TypeKind
 
 object ContractResolver {
 
-    fun apply(
+    private fun apply(
         contract: KonvertContract?,
         toFiled: VariableElement,
         fromFiled: VariableElement?
@@ -41,24 +44,33 @@ object ContractResolver {
         }
 
         // apply anyToString contract
-        if (toType.kind == TypeKind.DECLARED &&
-            toType.isType<String>() &&
+        if (toType.isType<String>() &&
             contract?.anyToString ?: DefaultContract.anyToString
         ) {
             return "${fromFiled.simpleName}.toString()"
         }
 
         // dateToEpochSeconds
-        if (toType.toString() == "java.lang.lang" &&
-            fromType.kind == TypeKind.DECLARED &&
-            (fromType.toString() == "java.time.LocalDateTime" ||
-                    fromType.toString() == "java.util.Date") &&
+        if ((toType.isPrimitiveType<Long>() ||
+                    toType.isType<Long>()) &&
+            (fromType.isType<LocalDateTime>() ||
+                    fromType.isType<Date>()) &&
             contract?.dateToEpochSeconds ?: DefaultContract.dateToEpochSeconds
         ) {
-            return "${fromFiled.simpleName}.toString()"
+            when {
+                fromType.isType<LocalDateTime>() -> {
+                    return "${fromFiled.simpleName}.toEpochSecond(ZoneOffset.of(ZoneOffset.systemDefault().id))"
+                }
+                fromType.isType<Date>() -> {
+                    return "${fromFiled.simpleName}.time"
+                }
+                else -> return "not found in when"
+            }
         }
 
-        return "null"
+//        return "\nTODO(\"[$fromFiled: $fromType] cannot convert to [$toFiled: $toType]\")\n"
+
+        return toType.isType<Long>().toString()
     }
 
     fun apply(

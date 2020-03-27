@@ -5,7 +5,7 @@ import konverter.annotation.KonvertContract
 @KonvertContract
 object DefaultContract {
 
-    const val dateToEpochSeconds: Boolean = false
+    const val dateToEpochSeconds: Boolean = true
 
     const val anyToString: Boolean = true
 }
