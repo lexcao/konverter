@@ -1,6 +1,8 @@
 package konverter.domain
 
 import com.squareup.kotlinpoet.FunSpec
+import konverter.helper.elementUtils
+import javax.lang.model.element.TypeElement
 import kotlin.reflect.KClass
 
 /**
@@ -11,9 +13,19 @@ data class KonvertPoetInfo(
     val imports: Set<ImportInfo> = emptySet()
 ) {
     data class ImportInfo(
-        val clazz: KClass<*>
+        val packageName: String,
+        val name: String
     ) {
-        val packageName: String = clazz.java.packageName
-        val name: String = clazz.simpleName.toString()
+
+        constructor(clazz: KClass<*>) : this(
+            packageName = clazz.java.packageName,
+            name = clazz.simpleName.toString()
+
+        )
+
+        constructor(element: TypeElement) : this(
+            packageName = elementUtils.getPackageOf(element).toString(),
+            name = element.simpleName.toString()
+        )
     }
 }

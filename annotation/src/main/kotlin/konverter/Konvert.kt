@@ -35,4 +35,18 @@ annotation class Konvert(
     annotation class Filed(
         val name: String
     )
+
+    /**
+     *  Define a custom converter for specified type
+     *  @see KonvertBy
+     */
+    @Target(AnnotationTarget.FIELD)
+    @Retention(AnnotationRetention.SOURCE)
+    annotation class By(
+        val value: KClass<out KonvertBy<*, *>>
+    )
+
+    interface KonvertBy<From, To> {
+        fun From.konvert(): To
+    }
 }
