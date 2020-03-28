@@ -1,6 +1,6 @@
 package demo
 
-import konverter.annotation.Konvert
+import konverter.Konvert
 
 fun main() {
     val a = A("1", "test")

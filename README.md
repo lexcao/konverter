@@ -5,11 +5,11 @@ done:
 * defaultValueIfMissing
 * DateToString
 * refactoring for collect import
+* @Konvert.Filed
 
 todo:
 
-* write converter function
+* converter function in Filed
 * refactor contract to converter function
-* @KonvertField
 * @KonvertConverter
 * @Konverter

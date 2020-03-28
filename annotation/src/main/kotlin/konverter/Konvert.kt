@@ -1,11 +1,11 @@
-package konverter.annotation
+package konverter
 
 import kotlin.reflect.KClass
 
 /**
  *  Usage:
  *
- *  @Konvert(to: UserDTO::Class)
+ *  @Konvert(to = UserDTO::Class)
  *  data class UserEntity(
  *      val id: String,
  *      val name: String
@@ -25,4 +25,14 @@ import kotlin.reflect.KClass
 @Retention(AnnotationRetention.SOURCE)
 annotation class Konvert(
     val to: KClass<*>
-)
+) {
+
+    /**
+     *  Specify the field from converted class to mapping with
+     */
+    @Target(AnnotationTarget.FIELD)
+    @Retention(AnnotationRetention.SOURCE)
+    annotation class Filed(
+        val name: String
+    )
+}

@@ -1,7 +1,7 @@
 package konverter.processor
 
 import com.squareup.kotlinpoet.FileSpec
-import konverter.annotation.Konvert
+import konverter.Konvert
 import konverter.domain.KonvertMetaInfo
 import konverter.helper.filer
 import konverter.helper.initTools
@@ -17,7 +17,7 @@ import javax.lang.model.element.ElementKind
 import javax.lang.model.element.TypeElement
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-@SupportedAnnotationTypes("konverter.annotation.Konvert")
+@SupportedAnnotationTypes("konverter.Konvert")
 class KonvertProcessor : AbstractProcessor() {
 
     override fun init(processingEnv: ProcessingEnvironment) {

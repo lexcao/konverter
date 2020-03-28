@@ -4,7 +4,7 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName
-import konverter.annotation.Konvert
+import konverter.Konvert
 import konverter.annotation.KonvertContract
 import konverter.helper.elementUtils
 import konverter.helper.getAnnotationClassValue

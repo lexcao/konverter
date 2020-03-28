@@ -1,7 +1,7 @@
 package demo.test
 
 import demo.toFullTypeTo
-import konverter.annotation.Konvert
+import konverter.Konvert
 import org.junit.Assert
 import org.junit.Test
 

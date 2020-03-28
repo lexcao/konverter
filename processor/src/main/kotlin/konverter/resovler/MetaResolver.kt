@@ -1,5 +1,6 @@
 package konverter.resovler
 
+import konverter.Konvert
 import konverter.domain.KonvertMetaInfo
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
@@ -14,11 +15,14 @@ object MetaResolver {
         val from = meta.fromClass
         val to = meta.toClass
 
-        val fromMembersMap = from.members.associateBy { it.simpleName }
+        val fromMembersMap = from.members.associateBy {
+            it.getAnnotation(Konvert.Filed::class.java)?.name
+                ?: it.simpleName.toString()
+        }
 
         return to.members.associateBy(
             keySelector = { it },
-            valueTransform = { fromMembersMap[it.simpleName] }
+            valueTransform = { fromMembersMap[it.simpleName.toString()] }
         )
     }
 }
