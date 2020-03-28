@@ -4,10 +4,10 @@ done:
 * anyToString
 * defaultValueIfMissing
 * DateToString
+* refactoring for collect import
 
 todo:
 
-* refactoring for collect import
 * write converter function
 * refactor contract to converter function
 * @KonvertField

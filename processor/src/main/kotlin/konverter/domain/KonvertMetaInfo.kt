@@ -13,6 +13,9 @@ import javax.lang.model.element.PackageElement
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
 
+/**
+ *  meta info processed by kapt
+ */
 data class KonvertMetaInfo(
     val annotatedClass: TypeElement
 ) {
