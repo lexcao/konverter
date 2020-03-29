@@ -47,6 +47,14 @@ object ContractResolver {
             )
         }
 
+        // @Konvert.Code
+        fromFiled.getAnnotation(Konvert.Code::class.java)?.run {
+            return KonvertResolvedInfo(
+                origin = fromFiled,
+                expression = expression
+            )
+        }
+
         // return from as same type
         val fromType = fromFiled.asType()
         if (toType == fromType) {

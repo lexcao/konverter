@@ -37,6 +37,15 @@ annotation class Konvert(
     )
 
     /**
+     *  Use raw code for converting to
+     */
+    @Target(AnnotationTarget.FIELD)
+    @Retention(AnnotationRetention.SOURCE)
+    annotation class Code(
+        val expression: String
+    )
+
+    /**
      *  Define a custom converter for specified type
      *  @see KonvertBy
      */
