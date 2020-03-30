@@ -5,6 +5,8 @@ import konverter.Konvert
 import konverter.domain.KonvertMetaInfo
 import konverter.helper.filer
 import konverter.helper.initTools
+import konverter.resovler.CodeResolver
+import konverter.resovler.ContractResolver
 import konverter.resovler.MetaResolver
 import konverter.resovler.PoetResolver
 import javax.annotation.processing.AbstractProcessor
@@ -31,13 +33,41 @@ class KonvertProcessor : AbstractProcessor() {
     ): Boolean {
         if (annotations.isEmpty()) return true
 
-        roundEnv.getElementsAnnotatedWith(Konvert::class.java)
+        /* roundEnv.getElementsAnnotatedWith(Konvert::class.java)
+             .filter { it.kind == ElementKind.CLASS }
+             .filterIsInstance<TypeElement>()
+             .map(MetaResolver::resolveKonvert)
+             .let(::process)*/
+
+        // 1. find and filter elements related to the annotation processed
+        val elements = roundEnv.getElementsAnnotatedWith(Konvert::class.java)
             .filter { it.kind == ElementKind.CLASS }
             .filterIsInstance<TypeElement>()
-            .map(MetaResolver::resolveKonvert)
-            .let(::process)
+
+        // 2. process type elements annotated by annotation
+        doProcess(elements)
 
         return true
+    }
+
+    // extract to another file if necessary
+    private fun doProcess(elements: List<TypeElement>) {
+        // 1. resolve meta data
+        val meta = elements.map { KonvertMetaInfo(it) }
+
+        val poetInfo = meta.map {
+            // 2. resolve relevant annotations
+            val membersMap = MetaResolver.resolveMembers(it)
+
+            // 3. resolve rules
+            val resolved = ContractResolver.apply(it, membersMap)
+
+            // 4. resolve poet element
+            PoetResolver.resolve(it, resolved)
+        }
+
+        // 5. generate kotlin code
+        CodeResolver.generate(meta.first(), poetInfo)
     }
 
     private fun process(them: List<KonvertMetaInfo>) {
