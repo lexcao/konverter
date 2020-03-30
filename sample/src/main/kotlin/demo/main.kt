@@ -3,11 +3,6 @@ package demo
 import konverter.Konvert
 import konverter.Konvertable
 
-fun main() {
-    val a = A("1", "test")
-    println(a.toB())
-}
-
 @Konvert(to = B::class)
 data class A(
     val id: String,

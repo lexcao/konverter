@@ -1,6 +1,7 @@
 package konverter.resovler
 
 import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.TypeName
 import konverter.domain.KonvertMetaInfo
 import konverter.domain.KonvertPoetInfo
 import konverter.domain.KonvertResolvedInfo
@@ -57,20 +58,34 @@ object PoetResolver {
             membersMap = membersMap
         )
 
+        return buildFunction(
+            toClassName = toClass.name.simpleName,
+            fromType = fromClass.type,
+            toType = toClass.type,
+            map = resolvedMembersMap
+        )
+    }
+
+    fun buildFunction(
+        toClassName: String,
+        fromType: TypeName,
+        toType: TypeName,
+        map: Map<VariableElement, KonvertResolvedInfo>
+    ): KonvertPoetInfo {
         val collectedImportElements = HashSet<TypeElement>()
         val collectedImportClasses = HashSet<KClass<*>>()
-        val members = toClass.members.joinToString(", ") {
-            val resolvedInfo = resolvedMembersMap.getValue(it)
+        val members = map.keys.joinToString(", ") {
+            val resolvedInfo = map.getValue(it)
             collectedImportClasses.addAll(resolvedInfo.importClasses)
             collectedImportElements.addAll(resolvedInfo.importElements)
             format("%s = %s", it.simpleName, resolvedInfo.expression)
         }
 
-        val funSpec = FunSpec.builder("to" + toClass.name.simpleName)
+        val funSpec = FunSpec.builder("to" + toClassName)
             .addKdoc("Auto generated code by @Konvert annotation processor")
-            .receiver(fromClass.type)
-            .addStatement("return %T($members)", toClass.type)
-            .returns(toClass.type)
+            .receiver(fromType)
+            .addStatement("return %T($members)", toType)
+            .returns(toType)
             .build()
 
         val imports = collectedImportClasses.map {

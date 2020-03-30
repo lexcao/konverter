@@ -8,13 +8,13 @@ done:
 * @Konvert.Filed
 * converter function by using converter (@By) 
 * converter function by using raw string literal (@Code)
+* simple @Konvertable
+* auto generate code like @Konvert when processing @Konvertable
 
 todo:
 
 * refactoring all code till now
-* nested object and recursive processing
 * refactor contract to converter function
-* @KonvertConverter
 * @Konverter
 
 ---
