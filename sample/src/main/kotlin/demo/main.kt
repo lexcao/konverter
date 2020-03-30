@@ -1,6 +1,7 @@
 package demo
 
 import konverter.Konvert
+import konverter.Konvertable
 
 fun main() {
     val a = A("1", "test")
@@ -20,6 +21,7 @@ data class B(
 )
 
 @Konvert(to = A::class)
+@Konvertable("D")
 data class C(
     val id: String,
     val name: String,

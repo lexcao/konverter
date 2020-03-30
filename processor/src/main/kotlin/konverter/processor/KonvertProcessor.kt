@@ -4,6 +4,7 @@ import com.squareup.kotlinpoet.FileSpec
 import konverter.Konvert
 import konverter.domain.KonvertMetaInfo
 import konverter.helper.filer
+import konverter.helper.info
 import konverter.helper.initTools
 import konverter.resovler.CodeResolver
 import konverter.resovler.ContractResolver
@@ -43,6 +44,8 @@ class KonvertProcessor : AbstractProcessor() {
         val elements = roundEnv.getElementsAnnotatedWith(Konvert::class.java)
             .filter { it.kind == ElementKind.CLASS }
             .filterIsInstance<TypeElement>()
+
+        info { "KonvertProcessor" }
 
         // 2. process type elements annotated by annotation
         doProcess(elements)

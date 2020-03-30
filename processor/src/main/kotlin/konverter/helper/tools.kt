@@ -11,6 +11,7 @@ import javax.lang.model.type.MirroredTypeException
 import javax.lang.model.type.TypeMirror
 import javax.lang.model.util.Elements
 import javax.lang.model.util.Types
+import javax.tools.Diagnostic
 import kotlin.reflect.KClass
 
 internal var init: Boolean = false
@@ -53,4 +54,8 @@ inline fun <reified T : Any> TypeMirror.isType(): Boolean {
 
 fun TypeMirror.notNull(): Boolean {
     return this.getAnnotation(NotNull::class.java) == null
+}
+
+fun info(message: () -> String) {
+    logger.printMessage(Diagnostic.Kind.WARNING, message())
 }

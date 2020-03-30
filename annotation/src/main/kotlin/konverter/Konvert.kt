@@ -19,7 +19,7 @@ import kotlin.reflect.KClass
  *  )
  *
  *  warning: the field name of the original need to match that of converting
- *  but you can use @KonvertField for mapping
+ *  but you can use @Konvert.Field for mapping
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)

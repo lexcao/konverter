@@ -18,7 +18,7 @@ data class KonvertPoetInfo(
     ) {
 
         constructor(clazz: KClass<*>) : this(
-            packageName = clazz.java.packageName,
+            packageName = clazz.java.`package`.name,
             name = clazz.simpleName.toString()
 
         )
