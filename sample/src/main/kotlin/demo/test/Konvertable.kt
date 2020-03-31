@@ -1,6 +1,7 @@
 package demo.test
 
 import konverter.Konvertable
+import konverter.To
 import org.junit.Test
 import java.time.LocalDateTime
 
@@ -12,7 +13,9 @@ internal class KonvertableTest {
     }
 }
 
-@Konvertable("KonvertableB", omit = ["birthday"])
+@Konvertable(
+    To(name = "KonvertableB", omit = ["birthday"])
+)
 data class KonvertableA(
     val id: String,
     val name: String,
@@ -20,7 +23,10 @@ data class KonvertableA(
     val birthday: LocalDateTime
 )
 
-@Konvertable("KonvertableD", pick = ["name"])
+@Konvertable(
+    To(name = "KonvertableD", pick = ["name"]),
+    To(name = "KonvertableS", pick = ["id", "age"])
+)
 data class KonvertableC(
     val id: String,
     val name: String,

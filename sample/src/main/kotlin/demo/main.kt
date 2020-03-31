@@ -2,6 +2,7 @@ package demo
 
 import konverter.Konvert
 import konverter.Konvertable
+import konverter.To
 
 @Konvert(to = B::class)
 data class A(
@@ -16,7 +17,7 @@ data class B(
 )
 
 @Konvert(to = A::class)
-@Konvertable("D")
+@Konvertable(To("D"))
 data class C(
     val id: String,
     val name: String,

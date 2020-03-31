@@ -10,12 +10,12 @@ done:
 * converter function by using raw string literal (@Code)
 * simple @Konvertable
 * auto generate code like @Konvert when processing @Konvertable
+* support multiple @Konvertable processing by adding @To
 
 todo:
 
 * refactoring all code till now
 * refactor contract to converter function
-* @Konverter
 
 ---
 Flow of the processing of @Konvert (old)
