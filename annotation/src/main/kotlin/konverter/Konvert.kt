@@ -32,7 +32,7 @@ annotation class Konvert(
      */
     @Target(AnnotationTarget.FIELD)
     @Retention(AnnotationRetention.SOURCE)
-    annotation class Filed(
+    annotation class Field(
         val name: String
     )
 

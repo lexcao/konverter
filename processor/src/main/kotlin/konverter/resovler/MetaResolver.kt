@@ -16,7 +16,7 @@ object MetaResolver {
         val to = meta.toClass
 
         val fromMembersMap = from.members.associateBy {
-            it.getAnnotation(Konvert.Filed::class.java)?.name
+            it.getAnnotation(Konvert.Field::class.java)?.name
                 ?: it.simpleName.toString()
         }
 

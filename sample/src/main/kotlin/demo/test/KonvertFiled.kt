@@ -23,6 +23,6 @@ data class FiledTestA(
 @Konvert(to = FiledTestA::class)
 data class FiledTestB(
 
-    @Konvert.Filed("username")
+    @Konvert.Field("username")
     val name: String
 )

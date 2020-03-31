@@ -11,6 +11,7 @@ done:
 * simple @Konvertable
 * auto generate code like @Konvert when processing @Konvertable
 * support multiple @Konvertable processing by adding @To
+* refactoring using KonvertPoet and KonvertablePoet
 
 todo:
 
