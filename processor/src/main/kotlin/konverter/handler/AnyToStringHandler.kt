@@ -4,16 +4,13 @@ import konverter.domain.KonvertResolvedInfo
 import konverter.helper.isType
 import javax.lang.model.element.VariableElement
 
-class AnyToStringHandler(
-    override val from: VariableElement,
-    override val to: VariableElement
-) : AnnotationHandler {
+object AnyToStringHandler : AnnotationHandler {
 
-    override fun support(): Boolean {
+    override fun support(from: VariableElement, to: VariableElement): Boolean {
         return to.asType().isType<String>()
     }
 
-    override fun handle(): KonvertResolvedInfo {
+    override fun handle(from: VariableElement, to: VariableElement): KonvertResolvedInfo {
         return KonvertResolvedInfo(
             expression = "${from.simpleName}.toString()"
         )

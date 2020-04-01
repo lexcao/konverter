@@ -69,6 +69,10 @@ inline fun <reified T : Annotation> RoundEnvironment.findAnnotatedClassElement()
         .filterIsInstance<TypeElement>()
 }
 
+inline fun <reified T : Annotation> VariableElement.hasAnnotation(): Boolean {
+    return getAnnotation(T::class.java) != null
+}
+
 val TypeElement.packetName: String
     get() = elementUtils.getPackageOf(this).toString()
 

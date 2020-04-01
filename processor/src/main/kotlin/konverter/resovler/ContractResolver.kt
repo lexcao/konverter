@@ -14,6 +14,14 @@ import javax.lang.model.type.TypeMirror
 
 object ContractResolver {
 
+    private val handlers = listOf(
+        KonvertCodeHandler,
+        SameTypeHandler,
+        KonvertByHandler,
+        AnyToStringHandler,
+        DateToLongHandler
+    )
+
     private fun apply(
         toFiled: VariableElement,
         fromFiled: VariableElement?
@@ -26,18 +34,9 @@ object ContractResolver {
             )
         }
 
-        // TODO avoid too many instance creation
-        val handlers = listOf(
-            KonvertCodeHandler(fromFiled, toFiled),
-            SameTypeHandler(fromFiled, toFiled),
-            KonvertByHandler(fromFiled, toFiled),
-            AnyToStringHandler(fromFiled, toFiled),
-            DateToLongHandler(fromFiled, toFiled)
-        )
-
         handlers.forEach {
-            if (it.support()) {
-                return it.handle()
+            if (it.support(fromFiled, toFiled)) {
+                return it.handle(fromFiled, toFiled)
             }
         }
 

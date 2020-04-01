@@ -5,10 +5,7 @@ import javax.lang.model.element.VariableElement
 
 interface AnnotationHandler {
 
-    val from: VariableElement
-    val to: VariableElement
+    fun support(from: VariableElement, to: VariableElement): Boolean
 
-    fun support(): Boolean
-
-    fun handle(): KonvertResolvedInfo
+    fun handle(from: VariableElement, to: VariableElement): KonvertResolvedInfo
 }

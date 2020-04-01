@@ -8,22 +8,19 @@ import java.time.ZoneOffset
 import java.util.Date
 import javax.lang.model.element.VariableElement
 
-class DateToLongHandler(
-    override val from: VariableElement,
-    override val to: VariableElement
-) : AnnotationHandler {
+object DateToLongHandler : AnnotationHandler {
 
-    private val fromType = from.asType()
-    private val toType = to.asType()
+    override fun support(from: VariableElement, to: VariableElement): Boolean {
+        val toType = to.asType()
+        val fromType = from.asType()
 
-    override fun support(): Boolean {
         val toIsLong = toType.isPrimitiveType<Long>() || toType.isType<Long>()
         val fromIsDate = fromType.isType<LocalDateTime>() || fromType.isType<Date>()
         return toIsLong && fromIsDate
     }
 
-    override fun handle(): KonvertResolvedInfo {
-        return if (fromType.isType<LocalDateTime>()) {
+    override fun handle(from: VariableElement, to: VariableElement): KonvertResolvedInfo {
+        return if (from.asType().isType<LocalDateTime>()) {
             val name = "${from.simpleName}.toEpochSecond(ZoneOffset.of(ZoneOffset.systemDefault().id))"
             KonvertResolvedInfo(
                 expression = name,
