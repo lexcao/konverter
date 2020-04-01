@@ -4,8 +4,11 @@ import org.jetbrains.annotations.NotNull
 import javax.annotation.processing.Filer
 import javax.annotation.processing.Messager
 import javax.annotation.processing.ProcessingEnvironment
+import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.element.Element
+import javax.lang.model.element.ElementKind
 import javax.lang.model.element.TypeElement
+import javax.lang.model.element.VariableElement
 import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.MirroredTypeException
 import javax.lang.model.type.TypeMirror
@@ -59,3 +62,17 @@ fun TypeMirror.notNull(): Boolean {
 fun info(message: () -> String) {
     logger.printMessage(Diagnostic.Kind.WARNING, message())
 }
+
+inline fun <reified T : Annotation> RoundEnvironment.findAnnotatedClassElement(): List<TypeElement> {
+    return getElementsAnnotatedWith(T::class.java)
+        .filter { it.kind == ElementKind.CLASS }
+        .filterIsInstance<TypeElement>()
+}
+
+val TypeElement.packetName: String
+    get() = elementUtils.getPackageOf(this).toString()
+
+val TypeElement.fields: List<VariableElement>
+    get() = enclosedElements
+        .filter { it.kind == ElementKind.FIELD }
+        .filterIsInstance<VariableElement>()

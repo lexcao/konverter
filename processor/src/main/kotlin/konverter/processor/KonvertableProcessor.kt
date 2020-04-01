@@ -8,17 +8,16 @@ import konverter.domain.poet.ExtensionFunction
 import konverter.domain.poet.Field
 import konverter.domain.poet.KonvertPoet
 import konverter.domain.poet.KonvertablePoet
-import konverter.helper.elementUtils
+import konverter.helper.fields
 import konverter.helper.filer
-import java.lang.String
+import konverter.helper.findAnnotatedClassElement
+import konverter.helper.packetName
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.RoundEnvironment
 import javax.annotation.processing.SupportedAnnotationTypes
 import javax.annotation.processing.SupportedSourceVersion
 import javax.lang.model.SourceVersion
-import javax.lang.model.element.ElementKind
 import javax.lang.model.element.TypeElement
-import javax.lang.model.element.VariableElement
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes("konverter.Konvertable")
@@ -31,20 +30,17 @@ class KonvertableProcessor : AbstractProcessor() {
         if (annotations.isEmpty()) return true
 
         // 1. find and filter elements related to the annotation processed
-        val elements = roundEnv.getElementsAnnotatedWith(annotations.first())
-            .filter { it.kind == ElementKind.CLASS }
-            .filterIsInstance<TypeElement>()
+        val elements = roundEnv.findAnnotatedClassElement<Konvertable>()
+
         if (elements.isEmpty()) {
             return true
         }
 
-        val packageName = elementUtils.getPackageOf(elements.first()).toString()
+        val packageName = elements.first().packetName
 
         val poetInfo = elements.flatMap { element ->
 
-            val originMembers = element.enclosedElements
-                .filter { it.kind == ElementKind.FIELD }
-                .filterIsInstance<VariableElement>()
+            val originMembers = element.fields
 
             val konvertable = element.getAnnotation(Konvertable::class.java)
             konvertable.classes.map { to ->
