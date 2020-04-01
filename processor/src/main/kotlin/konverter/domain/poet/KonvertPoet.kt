@@ -1,8 +1,8 @@
 package konverter.domain.poet
 
 import com.squareup.kotlinpoet.FileSpec
+import konverter.builder.kotlin
 import konverter.domain.KotlinPoet
-import konverter.helper.kotlin
 
 class KonvertPoet(
     override val packageName: String,
@@ -18,6 +18,8 @@ class KonvertPoet(
 
     override fun write(): FileSpec = kotlin(packageName, FILE_NAME) {
         functions.forEach {
+            import(it.imports)
+
             function(it.name) {
                 addKdoc(" Auto generated code by @Konvert")
                 receiver(it.receiver)

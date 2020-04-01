@@ -10,7 +10,7 @@ import konverter.domain.poet.KonvertPoet
 import konverter.domain.poet.KonvertablePoet
 import konverter.helper.fields
 import konverter.helper.filer
-import konverter.helper.findAnnotatedClassElement
+import konverter.helper.findElementsAnnotatedWith
 import konverter.helper.packetName
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.RoundEnvironment
@@ -30,7 +30,7 @@ class KonvertableProcessor : AbstractProcessor() {
         if (annotations.isEmpty()) return true
 
         // 1. find and filter elements related to the annotation processed
-        val elements = roundEnv.findAnnotatedClassElement<Konvertable>()
+        val elements = roundEnv.findElementsAnnotatedWith<Konvertable>()
 
         if (elements.isEmpty()) {
             return true

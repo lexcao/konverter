@@ -3,11 +3,11 @@ package konverter.processor
 import com.squareup.kotlinpoet.FileSpec
 import konverter.Konvert
 import konverter.domain.KonvertMetaInfo
+import konverter.domain.poet.KonvertPoet
 import konverter.helper.filer
-import konverter.helper.findAnnotatedClassElement
+import konverter.helper.findElementsAnnotatedWith
 import konverter.helper.initTools
 import konverter.helper.packetName
-import konverter.resovler.CodeResolver
 import konverter.resovler.ContractResolver
 import konverter.resovler.MetaResolver
 import konverter.resovler.PoetResolver
@@ -35,7 +35,7 @@ class KonvertProcessor : AbstractProcessor() {
         if (annotations.isEmpty()) return true
 
         // 1. find and filter elements related to the annotation processed
-        val elements = roundEnv.findAnnotatedClassElement<Konvert>()
+        val elements = roundEnv.findElementsAnnotatedWith<Konvert>()
         if (elements.isEmpty()) {
             return true
         }
@@ -48,7 +48,8 @@ class KonvertProcessor : AbstractProcessor() {
 
     // extract to another file if necessary
     private fun doProcess(elements: List<TypeElement>) {
-        val poetInfo = elements.map {
+        val packageName = elements.first().packetName
+        val functions = elements.map {
             // 1. resolve meta data
             val meta = KonvertMetaInfo(it)
 
@@ -63,7 +64,7 @@ class KonvertProcessor : AbstractProcessor() {
         }
 
         // 5. generate kotlin code
-        CodeResolver.generate(elements.first().packetName, poetInfo)
+        KonvertPoet(packageName, functions).write().writeTo(filer)
     }
 
     private fun process(them: List<KonvertMetaInfo>) {

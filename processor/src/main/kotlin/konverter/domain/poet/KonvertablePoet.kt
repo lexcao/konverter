@@ -4,8 +4,8 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.TypeSpec
+import konverter.builder.kotlin
 import konverter.domain.KotlinPoet
-import konverter.helper.kotlin
 
 class KonvertablePoet(
     override val packageName: String,

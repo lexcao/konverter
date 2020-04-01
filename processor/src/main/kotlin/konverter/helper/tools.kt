@@ -63,7 +63,7 @@ fun info(message: () -> String) {
     logger.printMessage(Diagnostic.Kind.WARNING, message())
 }
 
-inline fun <reified T : Annotation> RoundEnvironment.findAnnotatedClassElement(): List<TypeElement> {
+inline fun <reified T : Annotation> RoundEnvironment.findElementsAnnotatedWith(): List<TypeElement> {
     return getElementsAnnotatedWith(T::class.java)
         .filter { it.kind == ElementKind.CLASS }
         .filterIsInstance<TypeElement>()
