@@ -54,7 +54,6 @@ object PoetResolver {
         val membersMap = MetaResolver.resolveMembers(meta)
 
         val resolvedMembersMap = ContractResolver.apply(
-            meta = meta,
             membersMap = membersMap
         )
 

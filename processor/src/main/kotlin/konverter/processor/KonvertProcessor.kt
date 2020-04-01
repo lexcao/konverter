@@ -56,7 +56,7 @@ class KonvertProcessor : AbstractProcessor() {
             val membersMap = MetaResolver.resolveMembers(meta)
 
             // 3. resolve rules
-            val resolved = ContractResolver.apply(meta, membersMap)
+            val resolved = ContractResolver.apply(membersMap)
 
             // 4. resolve poet element
             PoetResolver.resolve(meta, resolved)
