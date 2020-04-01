@@ -14,7 +14,6 @@ import javax.lang.model.type.MirroredTypeException
 import javax.lang.model.type.TypeMirror
 import javax.lang.model.util.Elements
 import javax.lang.model.util.Types
-import javax.tools.Diagnostic
 import kotlin.reflect.KClass
 
 internal var init: Boolean = false
@@ -60,7 +59,7 @@ fun TypeMirror.notNull(): Boolean {
 }
 
 fun debug(message: () -> String) {
-    logger.printMessage(Diagnostic.Kind.WARNING, message())
+    System.err.println(message())
 }
 
 inline fun <reified T : Annotation> RoundEnvironment.findElementsAnnotatedWith(): List<TypeElement> {

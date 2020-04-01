@@ -6,29 +6,27 @@ import konverter.Konvertable
 import konverter.To
 import konverter.domain.kapt.KonvertableMeta
 import konverter.domain.kapt.Meta
+import konverter.domain.kapt.annotation
 import konverter.domain.poet.KonvertableWriter
 import konverter.domain.poet.Writable
 import konverter.domain.poet.component.DataClass
 import konverter.domain.poet.component.ExtensionFunction
 import konverter.domain.poet.component.Field
-import konverter.helper.debug
 import java.util.LinkedList
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
 
-class KonvertableProcessService : ProcessService<Konvertable> {
+class KonvertableProcessService : ProcessService {
 
-    override fun resolveKAPT(element: TypeElement): Meta<Konvertable> {
+    override fun resolveKAPT(element: TypeElement): Meta {
         val meta = KonvertableMeta(element)
-        debug { "resolveKAPT: $meta" }
 
         val classes = LinkedList<DataClass>()
         val functions = LinkedList<ExtensionFunction>()
-        meta.target.classes.forEach { to ->
+        meta.annotation<Konvertable>().classes.forEach { to ->
             val toClassName = to.name
             val resolvedFields = handleAnnotation(to, meta.fields)
 
-            debug { "meta.packageName: ${meta.packageName}" }
             val dataClass = DataClass(
                 name = toClassName,
                 packageName = meta.packageName,
@@ -70,7 +68,7 @@ class KonvertableProcessService : ProcessService<Konvertable> {
         }
     }
 
-    override fun resolvePoet(meta: List<Meta<Konvertable>>): Writable {
+    override fun resolvePoet(meta: List<Meta>): Writable {
         val filtered = meta.filterIsInstance<KonvertableMeta>()
         val flatClasses = filtered.flatMap { it.classes }
         val flatFunctions = filtered.flatMap { it.functions }

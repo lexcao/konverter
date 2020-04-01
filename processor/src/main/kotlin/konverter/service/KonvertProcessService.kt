@@ -23,7 +23,7 @@ import javax.lang.model.element.VariableElement
 import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
 
-class KonvertProcessService : ProcessService<Konvert> {
+class KonvertProcessService : ProcessService {
 
     private val handlers = listOf(
         KonvertCodeHandler,
@@ -33,7 +33,7 @@ class KonvertProcessService : ProcessService<Konvert> {
         DateToLongHandler
     )
 
-    override fun resolveKAPT(element: TypeElement): Meta<Konvert> {
+    override fun resolveKAPT(element: TypeElement): Meta {
         val meta = KonvertMeta(element)
         val from = meta.annotatedClass
         val to = meta.toClass
@@ -105,7 +105,7 @@ class KonvertProcessService : ProcessService<Konvert> {
         }
     }
 
-    override fun resolvePoet(meta: List<Meta<Konvert>>): Writable {
+    override fun resolvePoet(meta: List<Meta>): Writable {
         val filtered = meta.filterIsInstance<KonvertMeta>()
         val flatFunctions = filtered.map { it.function }
 

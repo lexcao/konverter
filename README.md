@@ -14,11 +14,12 @@ done:
 * refactoring using KonvertPoet and KonvertablePoet
 * refactoring using KonvertPoet by adding Import
 * remove unused code
+* use service to replace resolver
+* add BaseProcessor
 
 todo:
 
 * refactoring ContractResolver
-* abstract processor
 
 ---
 Flow of the processing of @Konvert (old)
