@@ -12,11 +12,13 @@ done:
 * auto generate code like @Konvert when processing @Konvertable
 * support multiple @Konvertable processing by adding @To
 * refactoring using KonvertPoet and KonvertablePoet
+* refactoring using KonvertPoet by adding Import
+* remove unused code
 
 todo:
 
-* refactoring all code till now
-* refactor contract to converter function
+* refactoring ContractResolver
+* abstract processor
 
 ---
 Flow of the processing of @Konvert (old)

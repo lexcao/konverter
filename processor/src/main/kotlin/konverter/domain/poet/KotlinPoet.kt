@@ -1,4 +1,4 @@
-package konverter.domain
+package konverter.domain.poet
 
 import com.squareup.kotlinpoet.FileSpec
 

@@ -1,6 +1,5 @@
 package konverter.processor
 
-import com.squareup.kotlinpoet.FileSpec
 import konverter.Konvert
 import konverter.domain.KonvertMetaInfo
 import konverter.domain.poet.KonvertPoet
@@ -65,22 +64,5 @@ class KonvertProcessor : AbstractProcessor() {
 
         // 5. generate kotlin code
         KonvertPoet(packageName, functions).write().writeTo(filer)
-    }
-
-    private fun process(them: List<KonvertMetaInfo>) {
-        if (them.isEmpty()) return
-        val fileName = "konvert-generated"
-        val packageName = them.first().packageElement.toString()
-
-        val fileBuilder = FileSpec.builder(packageName, fileName)
-
-        them.map(PoetResolver::buildKonvertFunction).forEach {
-            fileBuilder.addFunction(it.funSpec)
-            it.imports.forEach { import ->
-                fileBuilder.addImport(import.packageName, import.name)
-            }
-        }
-
-        fileBuilder.build().writeTo(filer)
     }
 }

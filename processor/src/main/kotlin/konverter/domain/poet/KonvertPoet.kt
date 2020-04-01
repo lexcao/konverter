@@ -2,7 +2,6 @@ package konverter.domain.poet
 
 import com.squareup.kotlinpoet.FileSpec
 import konverter.builder.kotlin
-import konverter.domain.KotlinPoet
 
 class KonvertPoet(
     override val packageName: String,
