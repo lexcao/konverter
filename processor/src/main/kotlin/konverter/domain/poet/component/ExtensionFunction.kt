@@ -1,4 +1,4 @@
-package konverter.domain.poet
+package konverter.domain.poet.component
 
 import com.squareup.kotlinpoet.TypeName
 

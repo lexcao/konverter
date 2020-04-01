@@ -4,7 +4,7 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
-import konverter.domain.poet.Import
+import konverter.domain.poet.component.Import
 
 class KotlinBuilder(
     packetName: String,

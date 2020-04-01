@@ -59,7 +59,7 @@ fun TypeMirror.notNull(): Boolean {
     return this.getAnnotation(NotNull::class.java) == null
 }
 
-fun info(message: () -> String) {
+fun debug(message: () -> String) {
     logger.printMessage(Diagnostic.Kind.WARNING, message())
 }
 

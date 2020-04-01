@@ -1,6 +1,5 @@
 package demo.test
 
-import demo.toContractTo
 import konverter.Konvert
 import org.junit.Assert
 import org.junit.Test

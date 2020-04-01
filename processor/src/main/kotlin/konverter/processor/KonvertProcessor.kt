@@ -1,15 +1,11 @@
 package konverter.processor
 
 import konverter.Konvert
-import konverter.domain.KonvertMetaInfo
-import konverter.domain.poet.KonvertPoet
 import konverter.helper.filer
 import konverter.helper.findElementsAnnotatedWith
 import konverter.helper.initTools
-import konverter.helper.packetName
-import konverter.resovler.ContractResolver
-import konverter.resovler.MetaResolver
-import konverter.resovler.PoetResolver
+import konverter.service.KonvertProcessService
+import konverter.service.ProcessService
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.ProcessingEnvironment
 import javax.annotation.processing.RoundEnvironment
@@ -22,6 +18,8 @@ import javax.lang.model.element.TypeElement
 @SupportedAnnotationTypes("konverter.Konvert")
 class KonvertProcessor : AbstractProcessor() {
 
+    private val service: ProcessService<Konvert> = KonvertProcessService()
+
     override fun init(processingEnv: ProcessingEnvironment) {
         super.init(processingEnv)
         initTools(processingEnv)
@@ -33,36 +31,19 @@ class KonvertProcessor : AbstractProcessor() {
     ): Boolean {
         if (annotations.isEmpty()) return true
 
-        // 1. find and filter elements related to the annotation processed
         val elements = roundEnv.findElementsAnnotatedWith<Konvert>()
         if (elements.isEmpty()) {
             return true
         }
 
-        // 2. process type elements annotated by annotation
-        doProcess(elements)
-
-        return true
-    }
-
-    // extract to another file if necessary
-    private fun doProcess(elements: List<TypeElement>) {
-        val packageName = elements.first().packetName
-        val functions = elements.map {
-            // 1. resolve meta data
-            val meta = KonvertMetaInfo(it)
-
-            // 2. resolve relevant annotations
-            val membersMap = MetaResolver.resolveMembers(meta)
-
-            // 3. resolve rules
-            val resolved = ContractResolver.apply(membersMap)
-
-            // 4. resolve poet element
-            PoetResolver.resolve(meta, resolved)
+        val meta = elements.map {
+            service.resolveKAPT(it)
+        }
+        meta.groupBy { it.packageName }.forEach { (_, it) ->
+            val writer = service.resolvePoet(it)
+            writer.write(filer)
         }
 
-        // 5. generate kotlin code
-        KonvertPoet(packageName, functions).write().writeTo(filer)
+        return true
     }
 }
