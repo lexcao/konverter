@@ -14,14 +14,11 @@ import konverter.handler.DateToLongHandler
 import konverter.handler.KonvertByHandler
 import konverter.handler.KonvertCodeHandler
 import konverter.handler.SameTypeHandler
+import konverter.helper.defaultValue
 import konverter.helper.fields
-import konverter.helper.isType
-import konverter.helper.notNull
 import java.util.LinkedList
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
-import javax.lang.model.type.TypeKind
-import javax.lang.model.type.TypeMirror
 
 class KonvertProcessService : ProcessService {
 
@@ -54,7 +51,7 @@ class KonvertProcessService : ProcessService {
 
             val resolvedInfo = if (from == null) {
                 KonvertResolvedInfo(
-                    expression = defaultValueOfType(toType)
+                    expression = to.defaultValue.toString()
                 )
             } else {
                 handlers.firstOrNull { it.support(from, to) }
@@ -84,24 +81,6 @@ class KonvertProcessService : ProcessService {
                 statement = members,
                 imports = imports
             )
-        }
-    }
-
-    private fun defaultValueOfType(type: TypeMirror): String {
-        return when (type.kind) {
-            TypeKind.INT -> "0"
-            TypeKind.BYTE -> "0"
-            TypeKind.LONG -> "0"
-            TypeKind.SHORT -> "0"
-            TypeKind.FLOAT -> "0.0f"
-            TypeKind.DOUBLE -> "0.0"
-            TypeKind.CHAR -> "'\u0000'"
-            TypeKind.BOOLEAN -> "false"
-            else -> {
-                // TODO handle String? = null
-                if (type.isType<String>() && type.notNull()) "\"\""
-                else "null"
-            }
         }
     }
 

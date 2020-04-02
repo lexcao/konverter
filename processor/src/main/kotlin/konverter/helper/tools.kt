@@ -4,13 +4,13 @@ import org.jetbrains.annotations.NotNull
 import javax.annotation.processing.Filer
 import javax.annotation.processing.Messager
 import javax.annotation.processing.ProcessingEnvironment
-import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
 import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.MirroredTypeException
+import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
 import javax.lang.model.util.Elements
 import javax.lang.model.util.Types
@@ -54,18 +54,12 @@ inline fun <reified T : Any> TypeMirror.isType(): Boolean {
     return T::class.javaObjectType.typeName == toString()
 }
 
-fun TypeMirror.notNull(): Boolean {
-    return this.getAnnotation(NotNull::class.java) == null
+inline fun <reified T : Any> VariableElement.isNotNullType(): Boolean {
+    return asType().isType<T>() && hasAnnotation<NotNull>()
 }
 
 fun debug(message: () -> String) {
     System.err.println(message())
-}
-
-inline fun <reified T : Annotation> RoundEnvironment.findElementsAnnotatedWith(): List<TypeElement> {
-    return getElementsAnnotatedWith(T::class.java)
-        .filter { it.kind == ElementKind.CLASS }
-        .filterIsInstance<TypeElement>()
 }
 
 inline fun <reified T : Annotation> VariableElement.hasAnnotation(): Boolean {
@@ -79,3 +73,19 @@ val TypeElement.fields: List<VariableElement>
     get() = enclosedElements
         .filter { it.kind == ElementKind.FIELD }
         .filterIsInstance<VariableElement>()
+
+val VariableElement.defaultValue: String
+    get() = when (asType().kind) {
+        TypeKind.INT -> "0"
+        TypeKind.BYTE -> "0"
+        TypeKind.LONG -> "0L"
+        TypeKind.SHORT -> "0"
+        TypeKind.FLOAT -> "0.0f"
+        TypeKind.DOUBLE -> "0.0"
+        TypeKind.CHAR -> "'\u0000'"
+        TypeKind.BOOLEAN -> "false"
+        else -> {
+            if (isNotNullType<String>()) "\"\""
+            else "null"
+        }
+    }

@@ -16,6 +16,7 @@ done:
 * remove unused code
 * use service to replace resolver
 * add BaseProcessor
+* finish TODO `resolve default value of notNull and nullable string`
 
 todo:
 
