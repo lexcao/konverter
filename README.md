@@ -20,7 +20,8 @@ done:
 
 todo:
 
-* refactoring ContractResolver
+* refactor resolving kapt
+* support List and nested Class
 
 ---
 Flow of the processing of @Konvert (old)
