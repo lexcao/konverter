@@ -3,7 +3,7 @@ package konverter.handler
 import konverter.domain.KonvertResolvedInfo
 import javax.lang.model.element.VariableElement
 
-object SameTypeHandler : AnnotationHandler {
+object SameTypeHandler : KonvertHandler {
 
     override fun support(from: VariableElement, to: VariableElement): Boolean {
         return from.asType() == to.asType()

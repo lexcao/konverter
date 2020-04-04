@@ -3,33 +3,23 @@ package demo.test
 import konverter.Konvert
 import org.junit.Assert
 import org.junit.Test
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.util.Date
 
 internal class AllContractTest {
 
     @Test
     fun anyToString() {
-        val nowDate = Date()
-        val nowLocalDateTime = LocalDateTime.now()
-        val actual = ContractFrom(10, nowDate, nowLocalDateTime)
-        val expect =
-            ContractTo("10", nowDate.time, nowLocalDateTime.toEpochSecond(ZoneOffset.of(ZoneOffset.systemDefault().id)))
+        val actual = AnyToStringA(10)
+        val expect = AnyToStringB("10")
 
-        Assert.assertEquals(expect, actual.toContractTo())
+        Assert.assertEquals(expect, actual.toAnyToStringB())
     }
 }
 
-@Konvert(ContractTo::class)
-data class ContractFrom(
-    val anyToStringInt: Int,
-    val dateToLong: Date,
-    val localDateTimeToLong: LocalDateTime
+@Konvert(AnyToStringB::class)
+data class AnyToStringA(
+    val anyToStringInt: Int
 )
 
-data class ContractTo(
-    val anyToStringInt: String,
-    val dateToLong: Long,
-    val localDateTimeToLong: Long
+data class AnyToStringB(
+    val anyToStringInt: String
 )

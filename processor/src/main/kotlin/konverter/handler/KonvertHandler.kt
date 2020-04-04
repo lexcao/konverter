@@ -3,7 +3,7 @@ package konverter.handler
 import konverter.domain.KonvertResolvedInfo
 import javax.lang.model.element.VariableElement
 
-interface AnnotationHandler {
+interface KonvertHandler {
 
     fun support(from: VariableElement, to: VariableElement): Boolean
 

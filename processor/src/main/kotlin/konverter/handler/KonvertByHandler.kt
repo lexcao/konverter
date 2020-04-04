@@ -6,7 +6,7 @@ import konverter.helper.getAnnotationClassValue
 import konverter.helper.hasAnnotation
 import javax.lang.model.element.VariableElement
 
-object KonvertByHandler : AnnotationHandler {
+object KonvertByHandler : KonvertHandler {
 
     override fun support(from: VariableElement, to: VariableElement): Boolean {
         return from.hasAnnotation<Konvert.By>()

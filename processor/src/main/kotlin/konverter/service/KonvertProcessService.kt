@@ -10,7 +10,6 @@ import konverter.domain.poet.Writable
 import konverter.domain.poet.component.ExtensionFunction
 import konverter.domain.poet.component.Import
 import konverter.handler.AnyToStringHandler
-import konverter.handler.DateToLongHandler
 import konverter.handler.KonvertByHandler
 import konverter.handler.KonvertCodeHandler
 import konverter.handler.SameTypeHandler
@@ -26,8 +25,7 @@ class KonvertProcessService : ProcessService {
         KonvertCodeHandler,
         SameTypeHandler,
         KonvertByHandler,
-        AnyToStringHandler,
-        DateToLongHandler
+        AnyToStringHandler
     )
 
     override fun resolveKAPT(element: TypeElement): Meta {

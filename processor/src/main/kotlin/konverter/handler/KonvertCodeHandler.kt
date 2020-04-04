@@ -5,7 +5,7 @@ import konverter.domain.KonvertResolvedInfo
 import konverter.helper.hasAnnotation
 import javax.lang.model.element.VariableElement
 
-object KonvertCodeHandler : AnnotationHandler {
+object KonvertCodeHandler : KonvertHandler {
 
     override fun support(from: VariableElement, to: VariableElement): Boolean {
         return from.hasAnnotation<Konvert.Code>()
