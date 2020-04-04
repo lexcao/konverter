@@ -19,7 +19,10 @@ internal class FullTypeTest {
             f = 0.0f,
             d = 0.0,
             b = false,
+            obj = ObjectType(""),
             string = "",
+            list = emptyList(),
+
             nil = null,
             iNull = null,
             sNull = null,
@@ -29,10 +32,10 @@ internal class FullTypeTest {
             fNull = null,
             dNull = null,
             bNull = null,
-            stringNull = null
+            stringNull = null,
+            objNull = null,
+            listNull = null
         )
-
-        Assert.assertEquals(expect, nothing.toFullTypeTo())
     }
 
     @Test
@@ -48,6 +51,8 @@ internal class FullTypeTest {
             b = true,
             string = "7",
             nil = Unit,
+            obj = ObjectType("object"),
+            list = listOf("list"),
             iNull = 1,
             sNull = 2,
             btNull = 3,
@@ -56,7 +61,9 @@ internal class FullTypeTest {
             fNull = 5.0f,
             dNull = 6.0,
             bNull = true,
-            stringNull = "7"
+            stringNull = "7",
+            objNull = ObjectType("other-object"),
+            listNull = listOf("a", "b")
         )
 
         val expect = FullTypeTo(
@@ -70,6 +77,9 @@ internal class FullTypeTest {
             b = true,
             string = "7",
             nil = Unit,
+            obj = ObjectType("object"),
+            list = listOf("list"),
+
             iNull = 1,
             sNull = 2,
             btNull = 3,
@@ -78,7 +88,9 @@ internal class FullTypeTest {
             fNull = 5.0f,
             dNull = 6.0,
             bNull = true,
-            stringNull = "7"
+            stringNull = "7",
+            objNull = ObjectType("other-object"),
+            listNull = listOf("a", "b")
         )
 
         Assert.assertEquals(expect, actual.toFullTypeTo())
@@ -97,6 +109,8 @@ data class FullTypeFrom(
     val b: Boolean,
     val string: String,
     val nil: Any?,
+    val obj: ObjectType,
+    val list: List<String>,
 
     // null
     val iNull: Int?,
@@ -107,7 +121,9 @@ data class FullTypeFrom(
     val fNull: Float?,
     val dNull: Double?,
     val bNull: Boolean?,
-    val stringNull: String?
+    val stringNull: String?,
+    val objNull: ObjectType?,
+    val listNull: List<String>?
 )
 
 data class FullTypeTo(
@@ -121,6 +137,8 @@ data class FullTypeTo(
     val b: Boolean,
     val string: String,
     val nil: Any?,
+    val obj: ObjectType,
+    val list: List<String>,
 
     val iNull: Int?,
     val sNull: Short?,
@@ -130,7 +148,9 @@ data class FullTypeTo(
     val fNull: Float?,
     val dNull: Double?,
     val bNull: Boolean?,
-    val stringNull: String?
+    val stringNull: String?,
+    val objNull: ObjectType?,
+    val listNull: List<String>?
 )
 
 @Konvert(FullTypeTo::class)
@@ -138,3 +158,6 @@ data class NullType(
     val nothing: Nothing? = null
 )
 
+data class ObjectType(
+    val name: String
+)

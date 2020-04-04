@@ -1,18 +1,17 @@
 package konverter.handler
 
 import konverter.domain.KonvertResolvedInfo
-import konverter.helper.typeUtils
 import javax.lang.model.element.VariableElement
 
-object SameTypeHandler : KonvertHandler {
+object DefaultHandler : KonvertHandler {
 
     override fun support(from: VariableElement, to: VariableElement): Boolean {
-        return typeUtils.isSameType(from.asType(), to.asType())
+        return true
     }
 
     override fun handle(from: VariableElement, to: VariableElement): KonvertResolvedInfo {
         return KonvertResolvedInfo(
-            expression = from.simpleName.toString()
+            expression = "TODO(\"[${from.asType()}]·cannot·convert·to·[${to.asType()}]\")"
         )
     }
 }

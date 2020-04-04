@@ -10,6 +10,7 @@ import konverter.domain.poet.Writable
 import konverter.domain.poet.component.ExtensionFunction
 import konverter.domain.poet.component.Import
 import konverter.handler.AnyToStringHandler
+import konverter.handler.DefaultHandler
 import konverter.handler.KonvertByHandler
 import konverter.handler.KonvertCodeHandler
 import konverter.handler.SameTypeHandler
@@ -25,7 +26,8 @@ class KonvertProcessService : ProcessService {
         KonvertCodeHandler,
         SameTypeHandler,
         KonvertByHandler,
-        AnyToStringHandler
+        AnyToStringHandler,
+        DefaultHandler
     )
 
     override fun resolveKAPT(element: TypeElement): Meta {
@@ -45,30 +47,27 @@ class KonvertProcessService : ProcessService {
 
         val resolved = HashMap<VariableElement, KonvertResolvedInfo>()
         to2FromFields.forEach { (to, from) ->
-            val toType = to.asType()
 
             val resolvedInfo = if (from == null) {
                 KonvertResolvedInfo(
-                    expression = to.defaultValue.toString()
+                    expression = to.defaultValue
                 )
             } else {
-                handlers.firstOrNull { it.support(from, to) }
-                    ?.handle(from, to)
-            } ?: KonvertResolvedInfo(
-                expression = "\nTODO(\"[$from: ${from?.asType()}] cannot convert to [$to: $toType]\")\n"
-            )
+                handlers.first { it.support(from, to) }
+                    .handle(from, to)
+            }
 
             resolved[to] = resolvedInfo
         }
 
         val imports = LinkedList<Import>()
-        val members = to.fields.joinToString(", ") {
+        val members = to.fields.joinToString(",") {
             val resolvedInfo = resolved.getValue(it)
             imports.addAll(resolvedInfo.importClasses.map { Import(it) } +
                     resolvedInfo.importElements.map {
                         Import(it)
                     })
-            String.format("%s = %s", it.simpleName, resolvedInfo.expression)
+            String.format("%s=%s", it.simpleName, resolvedInfo.expression)
         }
 
         return meta.apply {

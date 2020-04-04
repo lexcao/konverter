@@ -38,8 +38,8 @@ class KonvertableProcessService : ProcessService {
                 name = "to$toClassName",
                 receiver = element.asType().asTypeName(),
                 returns = ClassName.bestGuess(dataClass.qualifiedName),
-                statement = resolvedFields.joinToString(", ") {
-                    String.format("%s = %s", it.simpleName, it.simpleName)
+                statement = resolvedFields.joinToString(",") {
+                    String.format("%s=%s", it.simpleName, it.simpleName)
                 }
             )
         }

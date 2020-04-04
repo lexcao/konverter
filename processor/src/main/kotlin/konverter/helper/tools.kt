@@ -1,6 +1,6 @@
 package konverter.helper
 
-import org.jetbrains.annotations.NotNull
+import org.jetbrains.annotations.Nullable
 import javax.annotation.processing.Filer
 import javax.annotation.processing.Messager
 import javax.annotation.processing.ProcessingEnvironment
@@ -10,6 +10,7 @@ import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
 import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.MirroredTypeException
+import javax.lang.model.type.PrimitiveType
 import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
 import javax.lang.model.util.Elements
@@ -44,18 +45,12 @@ inline fun <reified T : Annotation> Element.getAnnotationClassValue(
     (e.typeMirror as DeclaredType).asElement() as TypeElement
 }
 
-inline fun <reified T : Any> TypeMirror.isPrimitiveType(): Boolean {
-    return T::class.javaPrimitiveType?.let {
-        it.isPrimitive && it.typeName == toString()
-    } ?: false
-}
-
 inline fun <reified T : Any> TypeMirror.isType(): Boolean {
     return T::class.javaObjectType.typeName == toString()
 }
 
-inline fun <reified T : Any> VariableElement.isNotNullType(): Boolean {
-    return asType().isType<T>() && hasAnnotation<NotNull>()
+fun VariableElement.nullable(): Boolean {
+    return hasAnnotation<Nullable>()
 }
 
 fun debug(message: () -> String) {
@@ -75,6 +70,14 @@ val TypeElement.fields: List<VariableElement>
         .filterIsInstance<VariableElement>()
 
 val VariableElement.defaultValue: String
+    get() = when {
+        asType() is PrimitiveType -> defaultValueOfPrimitive
+        nullable() -> "null"
+        asType().isType<String>() -> "\"\""
+        else -> defaultValueOfObject
+    }
+
+private val VariableElement.defaultValueOfPrimitive: String
     get() = when (asType().kind) {
         TypeKind.INT -> "0"
         TypeKind.BYTE -> "0"
@@ -84,8 +87,8 @@ val VariableElement.defaultValue: String
         TypeKind.DOUBLE -> "0.0"
         TypeKind.CHAR -> "'\u0000'"
         TypeKind.BOOLEAN -> "false"
-        else -> {
-            if (isNotNullType<String>()) "\"\""
-            else "null"
-        }
+        else -> "null"
     }
+
+private val VariableElement.defaultValueOfObject: String
+    get() = "TODO(\"Default·value·of·reference·type·is·not·supported\")"
