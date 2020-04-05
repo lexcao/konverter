@@ -11,7 +11,7 @@ buildscript {
 
 subprojects {
 
-    group = "org.example"
+    group = "io.lexcao.github"
     version = "1.0-SNAPSHOT"
 
     repositories {

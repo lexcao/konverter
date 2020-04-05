@@ -3,13 +3,11 @@ package demo.test
 import konverter.Konvert
 import org.junit.Assert
 import org.junit.Test
-import java.time.LocalDateTime
 
 internal class KonvertByTest {
 
     @Test
     fun convertBy() {
-        val now = LocalDateTime.now()
         val actual = ByTestB(ByTestEnum.B)
         val expect = ByTestA(1)
 

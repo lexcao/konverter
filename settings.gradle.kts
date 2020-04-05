@@ -1,7 +1,7 @@
 rootProject.name = "konverter"
 
 include(
-    ":processor",
-    ":annotation",
-    ":sample"
+    ":konverter-processor",
+    ":konverter-annotation",
+    ":konverter-sample"
 )

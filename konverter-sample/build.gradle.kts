@@ -4,8 +4,8 @@ plugins {
 }
 
 dependencies {
-    kapt(project(":processor"))
-    implementation(project(":processor"))
+    kapt(project(":konverter-processor"))
+    implementation(project(":konverter-processor"))
     implementation(kotlin("stdlib-jdk8"))
     implementation("junit:junit:4.12")
 }
