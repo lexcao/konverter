@@ -18,8 +18,8 @@ import kotlin.reflect.KClass
  *      name = name
  *  )
  *
- *  warning: the field name of the original need to match that of converting
- *  but you can use @Konvert.Field for mapping
+ *  the field name to converted to need match that of original
+ *  you can use @Konvert.Field for name mapping
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
@@ -28,7 +28,7 @@ annotation class Konvert(
 ) {
 
     /**
-     *  Specify the field from converted class to mapping with
+     *  specify the field from converted class to mapping with
      */
     @Target(AnnotationTarget.FIELD)
     @Retention(AnnotationRetention.SOURCE)
@@ -37,7 +37,7 @@ annotation class Konvert(
     )
 
     /**
-     *  Use raw code for converting to
+     *  use raw code for converting to
      */
     @Target(AnnotationTarget.FIELD)
     @Retention(AnnotationRetention.SOURCE)
@@ -46,7 +46,7 @@ annotation class Konvert(
     )
 
     /**
-     *  Define a custom converter for specified type
+     *  define a custom converter for specified type
      *  @see KonvertBy
      */
     @Target(AnnotationTarget.FIELD)
