@@ -7,11 +7,9 @@ import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
 
 data class KonvertableMeta(
-    override val annotatedClass: TypeElement
+    override val annotatedClass: TypeElement,
+    val classes: List<DataClass>,
+    val functions: List<ExtensionFunction>
 ) : Meta {
-
     val fields: List<VariableElement> = annotatedClass.fields
-
-    lateinit var classes: List<DataClass>
-    lateinit var functions: List<ExtensionFunction>
 }

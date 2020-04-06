@@ -11,5 +11,5 @@ data class KonvertMeta(
 
     val toClass = annotatedClass.getAnnotationClassValue<Konvert> { to }
 
-    lateinit var function: ExtensionFunction
+    lateinit var functions: List<ExtensionFunction>
 }

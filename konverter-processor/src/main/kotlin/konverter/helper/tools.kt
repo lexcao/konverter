@@ -1,5 +1,8 @@
 package konverter.helper
 
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.TypeName
+import konverter.domain.poet.component.DataClass
 import org.jetbrains.annotations.Nullable
 import javax.annotation.processing.Filer
 import javax.annotation.processing.Messager
@@ -10,7 +13,6 @@ import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
 import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.MirroredTypeException
-import javax.lang.model.type.PrimitiveType
 import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
 import javax.lang.model.util.Elements
@@ -57,6 +59,10 @@ fun debug(message: () -> String) {
     System.err.println(message())
 }
 
+inline fun <reified T : Annotation> Element.annotation(): T? {
+    return getAnnotation(T::class.java)
+}
+
 inline fun <reified T : Annotation> VariableElement.hasAnnotation(): Boolean {
     return getAnnotation(T::class.java) != null
 }
@@ -71,7 +77,7 @@ val TypeElement.fields: List<VariableElement>
 
 val VariableElement.defaultValue: String
     get() = when {
-        asType() is PrimitiveType -> defaultValueOfPrimitive
+        asType().kind.isPrimitive -> defaultValueOfPrimitive
         nullable() -> "null"
         asType().isType<String>() -> "\"\""
         else -> defaultValueOfObject
@@ -92,3 +98,5 @@ private val VariableElement.defaultValueOfPrimitive: String
 
 private val VariableElement.defaultValueOfObject: String
     get() = "TODO(\"Default·value·of·reference·type·is·not·supported\")"
+
+fun DataClass.asTypeName(): TypeName = ClassName.bestGuess(qualifiedName)

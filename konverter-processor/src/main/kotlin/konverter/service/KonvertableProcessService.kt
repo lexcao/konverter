@@ -1,52 +1,64 @@
 package konverter.service
 
-import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.asTypeName
 import konverter.Konvertable
 import konverter.To
 import konverter.domain.kapt.KonvertableMeta
 import konverter.domain.kapt.Meta
-import konverter.domain.kapt.annotation
 import konverter.domain.poet.KonvertableWriter
 import konverter.domain.poet.Writable
 import konverter.domain.poet.component.DataClass
 import konverter.domain.poet.component.ExtensionFunction
 import konverter.domain.poet.component.Field
+import konverter.helper.annotation
+import konverter.helper.asTypeName
+import konverter.helper.fields
+import konverter.helper.packetName
 import java.util.LinkedList
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
 
 class KonvertableProcessService : ProcessService {
 
+    // TODO extract ExtensionFunction to common method
     override fun resolveKAPT(element: TypeElement): Meta {
-        val meta = KonvertableMeta(element)
-
         val classes = LinkedList<DataClass>()
         val functions = LinkedList<ExtensionFunction>()
-        meta.annotation<Konvertable>().classes.forEach { to ->
+        element.annotation<Konvertable>()?.classes?.forEach { to ->
             val toClassName = to.name
-            val resolvedFields = handleAnnotation(to, meta.fields)
+            val fromClassName = element.simpleName.toString()
+            val fromClassType = element.asType().asTypeName()
+            val resolvedFields = handleAnnotation(to, element.fields)
 
-            val dataClass = DataClass(
+            val toClass = DataClass(
                 name = toClassName,
-                packageName = meta.packageName,
+                packageName = element.packetName,
                 constructorFields = resolvedFields.map { Field(it) }
             )
 
-            classes += dataClass
+            classes += toClass
             functions += ExtensionFunction(
                 name = "to$toClassName",
-                receiver = element.asType().asTypeName(),
-                returns = ClassName.bestGuess(dataClass.qualifiedName),
+                receiver = fromClassType,
+                returns = toClass.asTypeName(),
+                statement = resolvedFields.joinToString(",") {
+                    String.format("%s=%s", it.simpleName, it.simpleName)
+                }
+            )
+            functions += ExtensionFunction(
+                name = "to$fromClassName",
+                receiver = toClass.asTypeName(),
+                returns = fromClassType,
                 statement = resolvedFields.joinToString(",") {
                     String.format("%s=%s", it.simpleName, it.simpleName)
                 }
             )
         }
-        return meta.apply {
-            this.classes = classes
-            this.functions = functions
-        }
+        return KonvertableMeta(
+            annotatedClass = element,
+            classes = classes,
+            functions = functions
+        )
     }
 
     private fun handleAnnotation(

@@ -22,6 +22,11 @@ package konverter
  *      id = id,
  *      name = name
  *  )
+ *
+ *  fun UserDTO.toUserEntity() = UserEntity(
+ *     id = id,
+ *     name = name
+ *  )
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)

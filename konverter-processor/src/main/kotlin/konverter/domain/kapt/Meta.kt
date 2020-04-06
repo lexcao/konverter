@@ -9,7 +9,3 @@ interface Meta {
     val packageName: String
         get() = annotatedClass.packetName
 }
-
-inline fun <reified T : Annotation> Meta.annotation(): T {
-    return annotatedClass.getAnnotation(T::class.java)
-}
