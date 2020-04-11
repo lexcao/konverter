@@ -1,21 +1,18 @@
 package konverter.domain
 
-import javax.lang.model.element.TypeElement
-
 data class CompositeResolvedInfo(
-    val fromElement: TypeElement,
-    val toElement: TypeElement,
-    val fromField: List<Resolved>,
-    val toField: List<Resolved>
+    val from: BuildFunctionInfo,
+    val to: BuildFunctionInfo
+
 ) {
 
-    val from2To: Map<Resolved, Resolved?>
-    val to2From: Map<Resolved, Resolved?>
+    val from2To: Map<ResolvedField, ResolvedField?>
+    val to2From: Map<ResolvedField, ResolvedField?>
 
     init {
-        val fromFieldMap = fromField.associateBy { it.name }
-        val toFieldMap = toField.associateBy { it.name }
-        from2To = fromField.associateWith { toFieldMap[it.name] }
-        to2From = toField.associateWith { fromFieldMap[it.name] }
+        val fromFieldMap = from.fields.associateBy { it.fromName }
+        val toFieldMap = to.fields.associateBy { it.toName }
+        from2To = from.fields.associateWith { toFieldMap[it.toName] }
+        to2From = to.fields.associateWith { fromFieldMap[it.fromName] }
     }
 }

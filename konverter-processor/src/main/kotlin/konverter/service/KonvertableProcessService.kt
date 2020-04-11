@@ -3,6 +3,9 @@ package konverter.service
 import com.squareup.kotlinpoet.asTypeName
 import konverter.Konvertable
 import konverter.To
+import konverter.domain.BuildFunctionInfo
+import konverter.domain.CompositeResolvedInfo
+import konverter.domain.ResolvedField
 import konverter.domain.kapt.KonvertableMeta
 import konverter.domain.kapt.Meta
 import konverter.domain.poet.KonvertableWriter
@@ -10,9 +13,12 @@ import konverter.domain.poet.Writable
 import konverter.domain.poet.component.DataClass
 import konverter.domain.poet.component.ExtensionFunction
 import konverter.domain.poet.component.Field
+import konverter.handler.KonvertHandler
+import konverter.helper.Side
 import konverter.helper.annotation
 import konverter.helper.asTypeName
 import konverter.helper.fields
+import konverter.helper.nullable
 import konverter.helper.packetName
 import java.util.LinkedList
 import javax.lang.model.element.TypeElement
@@ -20,7 +26,6 @@ import javax.lang.model.element.VariableElement
 
 class KonvertableProcessService : ProcessService {
 
-    // TODO extract ExtensionFunction to common method
     override fun resolveKAPT(element: TypeElement): Meta {
         val classes = LinkedList<DataClass>()
         val functions = LinkedList<ExtensionFunction>()
@@ -35,23 +40,43 @@ class KonvertableProcessService : ProcessService {
                 packageName = element.packetName,
                 constructorFields = resolvedFields.map { Field(it) }
             )
+            val toClassType = toClass.asTypeName()
 
             classes += toClass
-            functions += ExtensionFunction(
-                name = "to$toClassName",
-                receiver = fromClassType,
-                returns = toClass.asTypeName(),
-                statement = resolvedFields.joinToString(",") {
-                    String.format("%s=%s", it.simpleName, it.simpleName)
-                }
-            )
-            functions += ExtensionFunction(
-                name = "to$fromClassName",
-                receiver = toClass.asTypeName(),
-                returns = fromClassType,
-                statement = resolvedFields.joinToString(",") {
-                    String.format("%s=%s", it.simpleName, it.simpleName)
-                }
+
+            val fromFields = element.fields.map {
+                ResolvedField(
+                    toName = it.simpleName.toString(),
+                    fromName = it.simpleName.toString(),
+                    type = it.asType(),
+                    side = Side.FROM,
+                    nullable = it.nullable()
+                )
+            }
+
+            val toFields = resolvedFields.map {
+                ResolvedField(
+                    toName = it.simpleName.toString(),
+                    fromName = it.simpleName.toString(),
+                    type = it.asType(),
+                    side = Side.TO,
+                    nullable = it.nullable()
+                )
+            }
+
+            functions += KonvertHandler.handle(
+                CompositeResolvedInfo(
+                    from = BuildFunctionInfo(
+                        name = fromClassName,
+                        type = fromClassType,
+                        fields = fromFields
+                    ),
+                    to = BuildFunctionInfo(
+                        name = toClassName,
+                        type = toClassType,
+                        fields = toFields
+                    )
+                )
             )
         }
         return KonvertableMeta(

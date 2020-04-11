@@ -27,12 +27,16 @@ data class ByTestB(
 )
 
 enum class ByTestEnum {
-    A, B
+    A, B;
 }
 
 object EnumToOrdinal : Konvert.KonvertBy<ByTestEnum, Int> {
-    override fun ByTestEnum.konvert(): Int {
+    override fun ByTestEnum.forward(): Int {
         return ordinal
+    }
+
+    override fun Int.backward(): ByTestEnum {
+        return ByTestEnum.values()[this]
     }
 }
 

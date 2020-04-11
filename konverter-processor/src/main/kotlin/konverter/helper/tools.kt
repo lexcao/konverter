@@ -48,7 +48,7 @@ inline fun <reified T : Annotation> Element.getAnnotationClassValue(
 }
 
 inline fun <reified T : Any> TypeMirror.isType(): Boolean {
-    return T::class.javaObjectType.typeName == toString()
+    return T::class.javaObjectType.canonicalName == toString()
 }
 
 fun VariableElement.nullable(): Boolean {
@@ -95,6 +95,35 @@ private val VariableElement.defaultValueOfPrimitive: String
         TypeKind.BOOLEAN -> "false"
         else -> "null"
     }
+
+val TypeMirror.defaultValueOfPrimitive: String
+    get() = when (kind) {
+        TypeKind.INT -> "0"
+        TypeKind.BYTE -> "0"
+        TypeKind.LONG -> "0L"
+        TypeKind.SHORT -> "0"
+        TypeKind.FLOAT -> "0.0f"
+        TypeKind.DOUBLE -> "0.0"
+        TypeKind.CHAR -> "'\u0000'"
+        TypeKind.BOOLEAN -> "false"
+        else -> "null"
+    }
+
+val TypeMirror.defaultValueOfObject: String
+    get() = "TODO(\"Default·value·of·reference·type·is·not·supported\")"
+
+fun TypeMirror.castTo(): String = when (kind) {
+    TypeKind.INT -> "toInt()"
+    TypeKind.BYTE -> "toByte()"
+    TypeKind.LONG -> "toLong()"
+    TypeKind.SHORT -> "toShort()"
+    TypeKind.FLOAT -> "toFloat()"
+    TypeKind.DOUBLE -> "toDouble()"
+    TypeKind.CHAR -> "toChar()"
+    TypeKind.BOOLEAN -> "toBoolean()"
+    else -> "TODO(\"not·supported·for·reference·type\")"
+}
+
 
 private val VariableElement.defaultValueOfObject: String
     get() = "TODO(\"Default·value·of·reference·type·is·not·supported\")"

@@ -27,7 +27,7 @@ data class KonvertableA(
     val id: String,
     val name: String,
     val age: Int,
-    val birthday: LocalDate
+    val birthday: LocalDate?
 )
 
 @Konvertable(

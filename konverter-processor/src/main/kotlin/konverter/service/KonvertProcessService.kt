@@ -1,15 +1,13 @@
 package konverter.service
 
-import konverter.Konvert
+import konverter.domain.BuildFunctionInfo
 import konverter.domain.CompositeResolvedInfo
-import konverter.domain.Resolved
 import konverter.domain.kapt.KonvertMeta
 import konverter.domain.kapt.Meta
 import konverter.domain.poet.KonvertWriter
 import konverter.domain.poet.Writable
 import konverter.handler.KonvertHandler
-import konverter.helper.annotation
-import konverter.helper.fields
+import konverter.helper.Side
 import javax.lang.model.element.TypeElement
 
 class KonvertProcessService : ProcessService {
@@ -19,25 +17,10 @@ class KonvertProcessService : ProcessService {
         val from = meta.annotatedClass
         val to = meta.toClass
 
-        val resolvedFromFields = from.fields.map {
-            val name = it.annotation<Konvert.Field>()?.name
-                ?: it.simpleName.toString()
-            Resolved(
-                original = it,
-                name = name
-            )
-        }
-
-        val resolvedToFields = to.fields.map {
-            Resolved(original = it)
-        }
-
         val functions = KonvertHandler.handle(
             CompositeResolvedInfo(
-                fromElement = from,
-                toElement = to,
-                fromField = resolvedFromFields,
-                toField = resolvedToFields
+                from = BuildFunctionInfo(from, Side.FROM),
+                to = BuildFunctionInfo(to, Side.TO)
             )
         )
 

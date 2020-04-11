@@ -1,18 +1,18 @@
 package konverter.handler
 
 import konverter.domain.KonvertResolvedInfo
+import konverter.domain.ResolvedField
 import konverter.helper.typeUtils
-import javax.lang.model.element.VariableElement
 
 object SameTypeHandler : KonvertHandler {
 
-    override fun support(from: VariableElement, to: VariableElement): Boolean {
-        return typeUtils.isSameType(from.asType(), to.asType())
+    override fun support(from: ResolvedField, to: ResolvedField): Boolean {
+        return typeUtils.isSameType(from.type, to.type)
     }
 
-    override fun handle(from: VariableElement, to: VariableElement): KonvertResolvedInfo {
+    override fun handle(from: ResolvedField, to: ResolvedField): KonvertResolvedInfo {
         return KonvertResolvedInfo(
-            expression = from.simpleName.toString()
+            expression = from.fromName
         )
     }
 }

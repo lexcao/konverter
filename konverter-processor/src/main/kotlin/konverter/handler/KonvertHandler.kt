@@ -1,41 +1,37 @@
 package konverter.handler
 
-import com.squareup.kotlinpoet.asTypeName
+import konverter.domain.BuildFunctionInfo
 import konverter.domain.CompositeResolvedInfo
 import konverter.domain.KonvertResolvedInfo
-import konverter.domain.Resolved
+import konverter.domain.ResolvedField
 import konverter.domain.poet.component.ExtensionFunction
 import konverter.domain.poet.component.Import
-import konverter.helper.defaultValue
 import java.util.LinkedList
-import javax.lang.model.element.TypeElement
-import javax.lang.model.element.VariableElement
 
 interface KonvertHandler {
 
-    fun support(from: VariableElement, to: VariableElement): Boolean
+    fun support(from: ResolvedField, to: ResolvedField): Boolean
 
-    fun handle(from: VariableElement, to: VariableElement): KonvertResolvedInfo
+    fun handle(from: ResolvedField, to: ResolvedField): KonvertResolvedInfo
 
     companion object {
 
         private val handlers = listOf(
-            KonvertCodeHandler,
             SameTypeHandler,
             KonvertByHandler,
             AnyToStringHandler,
             DefaultHandler
         )
 
-        fun handle(fieldsMap: Map<Resolved, Resolved?>): Map<Resolved, KonvertResolvedInfo> {
+        fun handle(fieldsMap: Map<ResolvedField, ResolvedField?>): Map<ResolvedField, KonvertResolvedInfo> {
             return fieldsMap.map { (to, from) ->
                 val resolvedTo = if (from == null) {
                     KonvertResolvedInfo(
-                        expression = to.original.defaultValue
+                        expression = to.defaultValue
                     )
                 } else {
-                    handlers.first { it.support(from.original, to.original) }
-                        .handle(from.original, to.original)
+                    handlers.first { it.support(from, to) }
+                        .handle(from, to)
                 }
                 to to resolvedTo
             }.toMap()
@@ -44,36 +40,36 @@ interface KonvertHandler {
         fun handle(resolve: CompositeResolvedInfo): List<ExtensionFunction> {
             return listOf(
                 buildFunction(
-                    from = resolve.fromElement,
-                    to = resolve.toElement,
+                    from = resolve.from,
+                    to = resolve.to,
                     fieldsMap = resolve.to2From
                 ), buildFunction(
-                    from = resolve.toElement,
-                    to = resolve.fromElement,
+                    from = resolve.to,
+                    to = resolve.from,
                     fieldsMap = resolve.from2To
                 )
             )
         }
 
         private fun buildFunction(
-            from: TypeElement,
-            to: TypeElement,
-            fieldsMap: Map<Resolved, Resolved?>
+            from: BuildFunctionInfo,
+            to: BuildFunctionInfo,
+            fieldsMap: Map<ResolvedField, ResolvedField?>
         ): ExtensionFunction {
 
             val imports = LinkedList<Import>()
             val resolved = handle(fieldsMap)
 
-            val members = fieldsMap.keys.joinToString(",") {
+            val statement = fieldsMap.keys.joinToString(",") {
                 val resolvedInfo = resolved.getValue(it)
-                String.format("%s=%s", it.name, resolvedInfo.expression)
+                String.format("%s=%s", it.fromName, resolvedInfo.expression)
             }
 
             return ExtensionFunction(
-                name = "to${to.simpleName}",
-                returns = to.asType().asTypeName(),
-                receiver = from.asType().asTypeName(),
-                statement = members,
+                name = "to${to.name}",
+                returns = to.type,
+                receiver = from.type,
+                statement = statement,
                 imports = imports
             )
         }

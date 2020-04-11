@@ -1,17 +1,17 @@
 package konverter.handler
 
 import konverter.domain.KonvertResolvedInfo
-import javax.lang.model.element.VariableElement
+import konverter.domain.ResolvedField
 
 object DefaultHandler : KonvertHandler {
 
-    override fun support(from: VariableElement, to: VariableElement): Boolean {
+    override fun support(from: ResolvedField, to: ResolvedField): Boolean {
         return true
     }
 
-    override fun handle(from: VariableElement, to: VariableElement): KonvertResolvedInfo {
+    override fun handle(from: ResolvedField, to: ResolvedField): KonvertResolvedInfo {
         return KonvertResolvedInfo(
-            expression = "TODO(\"[${from.asType()}]·cannot·convert·to·[${to.asType()}]\")"
+            expression = "TODO(\"[${from.type}]·cannot·convert·to·[${to.type}]\")"
         )
     }
 }

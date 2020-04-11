@@ -2,20 +2,27 @@ package konverter.handler
 
 import konverter.Konvert
 import konverter.domain.KonvertResolvedInfo
-import konverter.helper.getAnnotationClassValue
-import konverter.helper.hasAnnotation
-import javax.lang.model.element.VariableElement
+import konverter.domain.ResolvedField
+import konverter.helper.Side
+import konverter.helper.isType
 
 object KonvertByHandler : KonvertHandler {
 
-    override fun support(from: VariableElement, to: VariableElement): Boolean {
-        return from.hasAnnotation<Konvert.By>()
+    override fun support(from: ResolvedField, to: ResolvedField): Boolean {
+        return from.annotations.any { it.annotationType.isType<Konvert.By>() } ||
+                to.annotations.any { it.annotationType.isType<Konvert.By>() }
+
     }
 
-    override fun handle(from: VariableElement, to: VariableElement): KonvertResolvedInfo {
-        val target = from.getAnnotationClassValue<Konvert.By> { value }
+    override fun handle(from: ResolvedField, to: ResolvedField): KonvertResolvedInfo {
+        val (real, converter) = if (to.side == Side.TO) {
+            from to "forward()"
+        } else {
+            to to "backward()"
+        }
+        val target = real.convertedBy!!
         return KonvertResolvedInfo(
-            expression = "with(${target.simpleName}) { ${from.simpleName}.konvert() }",
+            expression = "with(${target.simpleName}) { ${from.fromName}.$converter }",
             importElements = listOf(target)
         )
     }

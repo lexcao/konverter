@@ -37,15 +37,6 @@ annotation class Konvert(
     )
 
     /**
-     *  use raw code for converting to
-     */
-    @Target(AnnotationTarget.FIELD)
-    @Retention(AnnotationRetention.SOURCE)
-    annotation class Code(
-        val expression: String
-    )
-
-    /**
      *  define a custom converter for specified type
      *  @see KonvertBy
      */
@@ -56,6 +47,7 @@ annotation class Konvert(
     )
 
     interface KonvertBy<From, To> {
-        fun From.konvert(): To
+        fun From.forward(): To
+        fun To.backward(): From
     }
 }
