@@ -1,7 +1,7 @@
 Generate converted data class for Kotlin.
 
 # Background
-While server-side developing with Kotlin, there are many sorts of objects such as BO(business object), DTO(data transfer object), EO(entity object) and POJO(plain old java object).
+Since server-side developing with Kotlin, there are many sorts of objects such as BO(business object), DTO(data transfer object), EO(entity object) and POJO(plain old java object) to coding.
 
 It would repeat ourselves to write those classes which fields are almost the same from bottom to top, for example, `UserEntity` to `UserDTO` to `UserBO`.
 
@@ -50,3 +50,8 @@ which generating:
 Support for using default parameters from constructor
 https://youtrack.jetbrains.com/issue/KT-29355
 https://github.com/spring-projects/spring-boot/issues/15397
+
+bugs: 
+Capitalize class name 
+fix same class name
+konvert by with companion object
