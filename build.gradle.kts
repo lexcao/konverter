@@ -11,8 +11,8 @@ buildscript {
 
 subprojects {
 
-    group = "io.lexcao.github"
-    version = "1.0-SNAPSHOT"
+    group = "io.github.lexcao"
+    version = "1.02"
 
     repositories {
         jcenter()

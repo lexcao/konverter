@@ -6,9 +6,7 @@ plugins {
 publishing {
     publications {
         create<MavenPublication>("default") {
-            groupId = "io.github.lexcao"
             artifactId = "konverter-annotation"
-            version = "1.0-SNAPSHOT"
 
             from(components["java"])
         }
