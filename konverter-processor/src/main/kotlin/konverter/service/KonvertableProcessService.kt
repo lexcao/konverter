@@ -17,9 +17,9 @@ import konverter.handler.KonvertHandler
 import konverter.helper.Side
 import konverter.helper.annotation
 import konverter.helper.asTypeName
-import konverter.helper.fields
 import konverter.helper.nullable
 import konverter.helper.packetName
+import konverter.helper.primaryConstructorParameters
 import java.util.LinkedList
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
@@ -33,18 +33,19 @@ class KonvertableProcessService : ProcessService {
             val toClassName = to.name
             val fromClassName = element.simpleName.toString()
             val fromClassType = element.asType().asTypeName()
-            val resolvedFields = handleAnnotation(to, element.fields)
+            val fromParameters = element.primaryConstructorParameters
+            val resolvedToFields = handleAnnotation(to, fromParameters)
 
             val toClass = DataClass(
                 name = toClassName,
                 packageName = element.packetName,
-                constructorFields = resolvedFields.map { Field(it) }
+                constructorFields = resolvedToFields.map { Field(it) }
             )
             val toClassType = toClass.asTypeName()
 
             classes += toClass
 
-            val fromFields = element.fields.map {
+            val fromFields = fromParameters.map {
                 ResolvedField(
                     toName = it.simpleName.toString(),
                     fromName = it.simpleName.toString(),
@@ -54,7 +55,7 @@ class KonvertableProcessService : ProcessService {
                 )
             }
 
-            val toFields = resolvedFields.map {
+            val toFields = resolvedToFields.map {
                 ResolvedField(
                     toName = it.simpleName.toString(),
                     fromName = it.simpleName.toString(),

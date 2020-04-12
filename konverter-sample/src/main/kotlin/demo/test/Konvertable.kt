@@ -11,24 +11,24 @@ internal class KonvertableTest {
 
     @Test
     fun konvertable() {
-        val given = KonvertableA("1", "A", 20, LocalDate.now())
+        val given = KonvertableA("1", "A", 20)
         Assert.assertEquals(
             given.toKonvertableB().toKonvertableA(),
             given
         )
-
     }
 }
 
 @Konvertable(
-    To(name = "KonvertableB", omit = ["birthday"])
+    To(name = "KonvertableB", omit = ["id"])
 )
 data class KonvertableA(
     val id: String,
     val name: String,
-    val age: Int,
-    val birthday: LocalDate?
-)
+    val age: Int
+) {
+    val birthday: LocalDate = LocalDate.now()
+}
 
 @Konvertable(
     To(name = "KonvertableD", pick = ["name"]),

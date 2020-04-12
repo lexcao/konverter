@@ -2,6 +2,7 @@ package konverter.handler
 
 import konverter.domain.KonvertResolvedInfo
 import konverter.domain.ResolvedField
+import konverter.helper.Side
 import konverter.helper.typeUtils
 
 object SameTypeHandler : KonvertHandler {
@@ -12,7 +13,7 @@ object SameTypeHandler : KonvertHandler {
 
     override fun handle(from: ResolvedField, to: ResolvedField): KonvertResolvedInfo {
         return KonvertResolvedInfo(
-            expression = from.fromName
+            expression = if (from.side == Side.FROM) from.fromName else to.toName
         )
     }
 }

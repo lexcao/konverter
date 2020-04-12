@@ -9,6 +9,7 @@ import javax.annotation.processing.Messager
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
+import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
 import javax.lang.model.type.DeclaredType
@@ -72,8 +73,15 @@ val TypeElement.packetName: String
 
 val TypeElement.fields: List<VariableElement>
     get() = enclosedElements
-        .filter { it.kind == ElementKind.FIELD }
+        .filter { it.kind.isField }
         .filterIsInstance<VariableElement>()
+
+val TypeElement.primaryConstructorParameters: List<VariableElement>
+    get() = enclosedElements.filterIsInstance<ExecutableElement>()
+        .first { it.kind == ElementKind.CONSTRUCTOR }.parameters
+
+val TypeElement.fieldsSuitForConstructor: List<VariableElement>
+    get() = fields.filter { it.simpleName in primaryConstructorParameters.map { it.simpleName } }
 
 val VariableElement.defaultValue: String
     get() = when {
@@ -123,7 +131,6 @@ fun TypeMirror.castTo(): String = when (kind) {
     TypeKind.BOOLEAN -> "toBoolean()"
     else -> "TODO(\"not·supported·for·reference·type\")"
 }
-
 
 private val VariableElement.defaultValueOfObject: String
     get() = "TODO(\"Default·value·of·reference·type·is·not·supported\")"

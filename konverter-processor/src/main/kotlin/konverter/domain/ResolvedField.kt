@@ -24,6 +24,8 @@ data class ResolvedField(
     val annotations: List<AnnotationMirror> = emptyList()
 ) {
 
+    val hasInitializer: Boolean = false
+
     constructor(original: VariableElement, side: Side) : this(
         fromName = original.simpleName.toString(),
         toName = original.annotation<Konvert.Field>()?.name

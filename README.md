@@ -45,3 +45,8 @@ which generating:
 * [] alternative way for default value of reference
 * [] support for nested class
 * [] support for generating Java code
+
+
+Support for using default parameters from constructor
+https://youtrack.jetbrains.com/issue/KT-29355
+https://github.com/spring-projects/spring-boot/issues/15397
