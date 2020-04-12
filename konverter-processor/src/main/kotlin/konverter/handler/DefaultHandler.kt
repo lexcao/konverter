@@ -9,9 +9,10 @@ object DefaultHandler : KonvertHandler {
         return true
     }
 
-    override fun handle(from: ResolvedField, to: ResolvedField): KonvertResolvedInfo {
+    override fun handle(context: HandlerContext): KonvertResolvedInfo {
+        val to = context.to
         return KonvertResolvedInfo(
-            expression = "TODO(\"[${from.type}]·cannot·convert·to·[${to.type}]\")"
+            expression = "TODO(\"[${to.toName}: ${to.type}·should·be·assigned·implicitly]\")"
         )
     }
 }

@@ -11,15 +11,31 @@ class FunctionPoet(
 ) : KotlinPoet {
 
     override fun write(): FileSpec = kotlin(packageName, fileName) {
-        functions.forEach {
-            import(it.imports)
+        functions.withEach {
+            import(imports)
 
-            function(it.name) {
+            function(name) {
                 addKdoc(" Auto generated code by @Konvert")
-                receiver(it.receiver)
-                returns(it.returns)
-                addStatement("return %T(${it.statement})", it.returns)
+                params.forEach {
+                    param(name = it.name, type = it.type) {
+                        defaultValue(it.expression)
+                    }
+                }
+                receiver(receiver)
+                returns(returns)
+                addStatement("return %T(${statement})", returns)
             }
         }
     }
+
+    private inline fun <T> Iterable<T>.withEach(action: T.() -> Unit) {
+        for (element in this) action(element)
+    }
+
+    fun test() {
+
+        A("test").copy()
+    }
+
+    data class A(val name: String)
 }

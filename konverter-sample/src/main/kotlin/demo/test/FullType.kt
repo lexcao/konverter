@@ -131,8 +131,8 @@ data class FullTypeTo(
     val s: Short,
     val bt: Byte,
     val l: Long,
-    val c: Char,
     val f: Float,
+    val c: Char,
     val d: Double,
     val b: Boolean,
     val string: String,
@@ -155,7 +155,7 @@ data class FullTypeTo(
 
 @Konvert(FullTypeTo::class)
 data class NullType(
-    val nothing: Nothing? = null
+    val nothing: Unit? = null
 )
 
 data class ObjectType(

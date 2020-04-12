@@ -7,5 +7,6 @@ data class ExtensionFunction(
     val receiver: TypeName,
     val returns: TypeName,
     val statement: String,
+    val params: List<Param>,
     val imports: List<Import> = emptyList()
 )

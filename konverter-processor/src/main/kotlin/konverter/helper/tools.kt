@@ -1,7 +1,10 @@
 package konverter.helper
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.ParameterizedTypeName
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeName
+import com.squareup.kotlinpoet.WildcardTypeName
 import konverter.domain.poet.component.DataClass
 import org.jetbrains.annotations.Nullable
 import javax.annotation.processing.Filer
@@ -19,6 +22,8 @@ import javax.lang.model.type.TypeMirror
 import javax.lang.model.util.Elements
 import javax.lang.model.util.Types
 import kotlin.reflect.KClass
+import kotlin.reflect.jvm.internal.impl.builtins.jvm.JavaToKotlinClassMap
+import kotlin.reflect.jvm.internal.impl.name.FqName
 
 internal var init: Boolean = false
 internal lateinit var elementUtils: Elements
@@ -136,3 +141,24 @@ private val VariableElement.defaultValueOfObject: String
     get() = "TODO(\"Default·value·of·reference·type·is·not·supported\")"
 
 fun DataClass.asTypeName(): TypeName = ClassName.bestGuess(qualifiedName)
+
+fun TypeName.javaToKotlinType(): TypeName {
+    return when (this) {
+        is ParameterizedTypeName -> {
+            (rawType.javaToKotlinType() as ClassName).parameterizedBy(*(typeArguments.map { it.javaToKotlinType() }
+                .toTypedArray()))
+        }
+        is WildcardTypeName -> {
+            outTypes[0].javaToKotlinType()
+        }
+        else -> {
+            val className =
+                JavaToKotlinClassMap.INSTANCE.mapJavaToKotlin(FqName(toString()))?.asSingleFqName()?.asString()
+            return if (className == null) {
+                this
+            } else {
+                ClassName.bestGuess(className)
+            }
+        }
+    }
+}

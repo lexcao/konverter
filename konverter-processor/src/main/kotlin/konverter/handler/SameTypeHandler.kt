@@ -11,9 +11,10 @@ object SameTypeHandler : KonvertHandler {
         return typeUtils.isSameType(from.type, to.type)
     }
 
-    override fun handle(from: ResolvedField, to: ResolvedField): KonvertResolvedInfo {
+    override fun handle(context: HandlerContext): KonvertResolvedInfo {
+        val (from, to, implicitThis) = context
         return KonvertResolvedInfo(
-            expression = if (from.side == Side.FROM) from.fromName else to.toName
+            expression = "$implicitThis." + if (from.side == Side.FROM) from.fromName else to.toName
         )
     }
 }

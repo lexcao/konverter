@@ -14,7 +14,8 @@ object KonvertByHandler : KonvertHandler {
 
     }
 
-    override fun handle(from: ResolvedField, to: ResolvedField): KonvertResolvedInfo {
+    override fun handle(context: HandlerContext): KonvertResolvedInfo {
+        val (from, to, implicitThis) = context
         val (real, converter) = if (to.side == Side.TO) {
             from to "forward()"
         } else {
@@ -22,7 +23,7 @@ object KonvertByHandler : KonvertHandler {
         }
         val target = real.convertedBy!!
         return KonvertResolvedInfo(
-            expression = "with(${target.simpleName}) { ${from.fromName}.$converter }",
+            expression = "with(${target.simpleName}) { $implicitThis.${from.fromName}.$converter }",
             importElements = listOf(target)
         )
     }

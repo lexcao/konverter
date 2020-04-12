@@ -3,6 +3,8 @@ package konverter.builder
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.ParameterSpec
+import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import konverter.domain.poet.component.Import
 
@@ -15,6 +17,10 @@ class KotlinBuilder(
 
     fun function(name: String, builder: FunSpec.Builder.() -> Unit) {
         _builder.addFunction(FunSpec.builder(name).apply(builder).build())
+    }
+
+    fun FunSpec.Builder.param(name: String, type: TypeName, builder: ParameterSpec.Builder.() -> Unit) {
+        addParameter(ParameterSpec.builder(name, type).apply(builder).build())
     }
 
     fun dataClass(name: String, builder: TypeSpec.Builder.() -> Unit) {

@@ -12,11 +12,13 @@ object AnyToStringHandler : KonvertHandler {
         return to.type.isType<String>() || from.type.isType<String>()
     }
 
-    override fun handle(from: ResolvedField, to: ResolvedField): KonvertResolvedInfo {
+    override fun handle(context: HandlerContext): KonvertResolvedInfo {
+        val (from, to, implicitThis) = context
+
         val expression = if (from.side == Side.FROM) {
-            "${from.fromName}.toString()"
+            "$implicitThis.${from.fromName}.toString()"
         } else {
-            "${to.toName}.${to.type.castTo()}"
+            "$implicitThis.${to.toName}.${to.type.castTo()}"
         }
         return KonvertResolvedInfo(
             expression = expression
