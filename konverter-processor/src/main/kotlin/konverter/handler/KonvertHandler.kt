@@ -82,9 +82,9 @@ interface KonvertHandler {
                     Param(
                         name = it.fromName,
                         expression = resolvedInfo.expression,
-                        type = it.type.asTypeName().javaToKotlinType().copy(
-                            nullable = it.nullable
-                        )
+                        type = it.type.asTypeName()
+                            .javaToKotlinType()
+                            .copy(nullable = it.nullable)
                     )
                 )
                 String.format("%s=%s", it.fromName, it.fromName)

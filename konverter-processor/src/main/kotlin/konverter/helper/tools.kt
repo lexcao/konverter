@@ -122,7 +122,7 @@ val TypeMirror.defaultValueOfPrimitive: String
         else -> "null"
     }
 
-val TypeMirror.defaultValueOfObject: String
+val defaultValueOfObject: String
     get() = "TODO(\"Default·value·of·reference·type·is·not·supported\")"
 
 fun TypeMirror.castTo(): String = when (kind) {

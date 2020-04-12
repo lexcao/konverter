@@ -13,7 +13,7 @@ internal class KonvertableTest {
     fun konvertable() {
         val given = KonvertableA("1", "A", 20)
         Assert.assertEquals(
-            given.toKonvertableB().toKonvertableA(),
+            given.toKonvertableB().toKonvertableA(id = "1"),
             given
         )
     }

@@ -18,7 +18,9 @@ class FunctionPoet(
                 addKdoc(" Auto generated code by @Konvert")
                 params.forEach {
                     param(name = it.name, type = it.type) {
-                        defaultValue(it.expression)
+                        if (it.hasDefaultValue) {
+                            defaultValue(it.expression)
+                        }
                     }
                 }
                 receiver(receiver)
