@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     kapt(project(":konverter-processor"))
-    implementation(project(":konverter-processor"))
+    implementation(project(":konverter-annotation"))
     implementation(kotlin("stdlib-jdk8"))
     implementation("junit:junit:4.12")
 }
