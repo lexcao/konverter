@@ -30,4 +30,5 @@ package konverter
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
+@MustBeDocumented
 annotation class Konvertable(vararg val classes: To)

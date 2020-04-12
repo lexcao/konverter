@@ -23,6 +23,7 @@ import kotlin.reflect.KClass
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
+@MustBeDocumented
 annotation class Konvert(
     val to: KClass<*>
 ) {

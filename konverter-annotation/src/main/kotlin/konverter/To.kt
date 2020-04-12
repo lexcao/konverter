@@ -1,7 +1,8 @@
 package konverter
 
-@Target(AnnotationTarget.CLASS)
+@Target(AnnotationTarget.ANNOTATION_CLASS)
 @Retention(AnnotationRetention.SOURCE)
+@MustBeDocumented
 annotation class To(
 
     /**
