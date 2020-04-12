@@ -2,7 +2,7 @@
 
 Code generation for converter between data class by KAPT.
 
-See the [blog](https://lexcao.github.io) for more detail.
+See the [blog](https://lexcao.github.io/zh/posts/konverter) for more detail.
 
 # Usage
 ## dependency
@@ -28,7 +28,7 @@ dependencies {
 }
 ```
 
-## example
+## example [code here](https://github.com/lexcao/konverter-demo)
 ```
 @Konvertable(
     To(name = "LoginDTO", pick = ["username", "password"]),
