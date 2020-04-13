@@ -2,7 +2,7 @@
 
 Code generation for converters between data class by KAPT.
 
-See the [blog](https://lexcao.github.io/posts/konverter) ([中文博客](https://lexcao.github.io/posts/konverter)) for more detail.
+See the [blog](https://lexcao.github.io/posts/konverter) ([中文博客](https://lexcao.github.io/zh/posts/konverter)) for more detail.
 
 
 # Usage
