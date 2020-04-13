@@ -1,8 +1,9 @@
 [![JitPack](https://jitpack.io/v/lexcao/konverter.svg)](https://jitpack.io/#lexcao/konverter)
 
-Code generation for converter between data class by KAPT.
+Code generation for converters between data class by KAPT.
 
-See the [blog](https://lexcao.github.io/zh/posts/konverter) for more detail.
+See the [blog](https://lexcao.github.io/posts/konverter) ([中文博客](https://lexcao.github.io/posts/konverter)) for more detail.
+
 
 # Usage
 ## dependency
@@ -28,7 +29,7 @@ dependencies {
 }
 ```
 
-## example [code here](https://github.com/lexcao/konverter-demo)
+## Example [code here](https://github.com/lexcao/konverter-demo)
 ```
 @Konvertable(
     To(name = "LoginDTO", pick = ["username", "password"]),
@@ -45,8 +46,8 @@ data class UserEntity(
 )
 ```
 
-## then generate
-### for @Konvertable
+## Then generate by `compileKotlin`
+### For @Konvertable
 ```
 /**
  *  Auto generated code by @Konvertable
@@ -120,7 +121,7 @@ fun RegisterDTO.toUserEntity(
 ): UserEntity = UserEntity(id=id,username=username,password=password,gender=gender)
 ```
 
-### for @Konvert
+### For @Konvert
 ```
 // the class to convert to 
 data class UserVO(
@@ -131,8 +132,6 @@ data class UserVO(
 
 enum class GenderEnum {
     MALE, FEMALE;
-
-    companion object
 }
 
 object GenderEnumConverter : Konvert.KonvertBy<Int, GenderEnum> {
@@ -179,4 +178,4 @@ the rules of conversion
 * support nested class
 * support for Java
 * fix bugs
-* support for using the default value of parameters on constructor or fields on class from original when missing(from now, Kotlin KAPT is only support for [default value of fields](https://youtrack.jetbrains.com/issue/KT-30164), but not for [parameters](https://youtrack.jetbrains.com/issue/KT-29355))
+* support for using the default value of parameters on constructors or fields on class from original when missing(from now, Kotlin KAPT is only support for [default value of fields](https://youtrack.jetbrains.com/issue/KT-30164), but not for [parameters](https://youtrack.jetbrains.com/issue/KT-29355))
